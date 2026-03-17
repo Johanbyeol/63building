@@ -3,41 +3,45 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TRIPON — 기록되는 여행, 이어지는 동선</title>
+  <title>TRIPON — 여행은 당신이, 기록은 우리가 자동으로</title>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --blue-deep:   #0A1628;
-      --blue-navy:   #0D1F3C;
+      --blue-deep:   #EEF5FF;
+      --blue-navy:   #D6E8FF;
       --blue-mid:    #1A47C8;
       --blue-bright: #2260E8;
-      --blue-glow:   #4A82FF;
-      --blue-light:  rgba(74,130,255,0.12);
-      --gold:        #F5A623;
-      --white:       #FFFFFF;
-      --text-muted:  rgba(255,255,255,0.55);
-      --border:      rgba(255,255,255,0.08);
-      --card-bg:     rgba(255,255,255,0.05);
+      --blue-glow:   #1A47C8;
+      --gold:        #E8940A;
+      --white:       #0D1F3C;
+      --text-muted:  rgba(13,31,60,0.55);
+      --border:      rgba(13,31,60,0.1);
+      --card-bg:     rgba(255,255,255,0.6);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-      background: var(--blue-deep);
-      color: var(--white);
+      background: #F0F6FF;
+      color: #0D1F3C;
       overflow-x: hidden;
     }
 
-    /* ── STARS ── */
-    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .star {
-      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.75);
-      animation: twinkle var(--dur) var(--delay) infinite ease-in-out alternate;
+    /* ── CLOUDS ── */
+    .clouds { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .cloud-wrap {
+      position: absolute;
+      animation: cloudDrift var(--spd, 60s) var(--delay, 0s) linear infinite;
     }
-    @keyframes twinkle {
-      from { opacity: 0.1; transform: scale(0.8); }
-      to   { opacity: 0.9; transform: scale(1.2); }
+    @keyframes cloudDrift {
+      from { transform: translateX(var(--from, -320px)); }
+      to   { transform: translateX(var(--to, 110vw)); }
+    }
+    /* Each cloud is built from overlapping circles */
+    .cloud-shape { position: relative; }
+    .cloud-shape span {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.82);
     }
 
     /* ── NAV ── */
@@ -45,22 +49,22 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 6vw;
-      background: rgba(10,22,40,0.82);
+      background: rgba(247,250,254,0.93);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(13,31,60,0.08);
     }
-    .nav-logo { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.03em; color: var(--white); }
+    .nav-logo { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.03em; color: #0D1F3C; }
     .nav-logo span { color: var(--gold); }
     .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--white); }
+    .nav-links a { font-size: 0.875rem; font-weight: 500; color: rgba(13,31,60,0.5); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #0D1F3C; }
     .nav-cta {
-      background: var(--blue-bright); color: var(--white);
+      background: var(--blue-bright); color: #fff;
       border: none; border-radius: 100px; padding: 10px 24px;
       font-size: 0.875rem; font-weight: 600; cursor: pointer; font-family: inherit;
       transition: background 0.2s, transform 0.15s;
     }
-    .nav-cta:hover { background: var(--blue-glow); transform: translateY(-1px); }
+    .nav-cta:hover { background: #1A47C8; transform: translateY(-1px); }
 
     /* ── HERO ── */
     #hero {
@@ -70,407 +74,609 @@
     }
     .hero-sky {
       position: absolute; inset: 0; z-index: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, #1A3A7A 0%, #0A1628 60%);
+      background: linear-gradient(175deg, #B8D8F8 0%, #C8E4FF 30%, #D8EEFF 55%, #E8F4FF 80%, #F2F8FF 100%);
     }
     .hero-horizon {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 220px; z-index: 1;
-      background: linear-gradient(to top, rgba(26,71,200,0.2), transparent);
+      position: absolute; bottom: 0; left: 0; right: 0; height: 180px; z-index: 1;
+      background: linear-gradient(to top, rgba(200,228,255,0.5), transparent);
     }
-    .hero-orb { position: absolute; border-radius: 50%; filter: blur(90px); z-index: 1; }
-    .orb1 { width: 550px; height: 550px; background: rgba(26,71,200,0.28); top: -200px; left: -150px; }
-    .orb2 { width: 400px; height: 400px; background: rgba(10,37,128,0.35); bottom: -100px; right: -80px; }
-    .orb3 { width: 220px; height: 220px; background: rgba(245,166,35,0.07); top: 35%; left: 50%; transform: translate(-50%,-50%); }
+    .hero-orb { display: none; }
 
-    /* ── BIG AIRPLANE ── */
-    .plane-wrapper {
-      position: absolute; inset: 0; pointer-events: none; z-index: 5; overflow: hidden;
-    }
+    /* ── HERO CONTENT ── */
+    .hero-content { position: relative; z-index: 10; width: 100%; }
 
-    /* Main large plane — upward-right trajectory */
-    .plane-svg {
+    /* ── PLANE CANVAS LAYER — sits over title ── */
+    .plane-stage {
       position: absolute;
-      width: 340px; height: 200px;
-      animation: bigFly 12s ease-in-out infinite;
-      filter: drop-shadow(0 0 28px rgba(74,130,255,0.85));
-    }
-    @keyframes bigFly {
-      0%   { left: -20%; top: 72%; opacity: 0; transform: rotate(-20deg) scale(0.85); }
-      6%   { opacity: 1; }
-      100% { left: 112%; top: -10%; opacity: 0; transform: rotate(-20deg) scale(1.05); }
-    }
-
-    /* Twin condensation trails */
-    .trail {
-      position: absolute;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, transparent, rgba(180,210,255,0.5));
-      transform-origin: right center;
-      animation: trailFly 12s ease-in-out infinite;
-    }
-    .trail2 {
-      position: absolute;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, transparent, rgba(180,210,255,0.35));
-      transform-origin: right center;
-      animation: trailFly2 12s ease-in-out infinite;
-    }
-    @keyframes trailFly {
-      0%   { left: -30%; top: 73%;  width: 0;     opacity: 0;   transform: rotate(-20deg); }
-      6%   { opacity: 1; width: 60px; }
-      50%  { width: 200px; }
-      92%  { opacity: 0.4; }
-      100% { left: 100%;  top: -8%;  width: 0;     opacity: 0;   transform: rotate(-20deg); }
-    }
-    @keyframes trailFly2 {
-      0%   { left: -30%; top: 75%;  width: 0;     opacity: 0;   transform: rotate(-20deg); }
-      6%   { opacity: 0.7; width: 45px; }
-      50%  { width: 160px; }
-      92%  { opacity: 0.3; }
-      100% { left: 100%;  top: -6%;  width: 0;     opacity: 0;   transform: rotate(-20deg); }
-    }
-
-    /* Small second plane — also upward-right, delayed */
-    .plane-sm {
-      position: absolute;
-      width: 80px; height: 80px;
-      opacity: 0.5;
-      animation: smFly 18s ease-in-out 6s infinite;
-      filter: drop-shadow(0 0 12px rgba(245,166,35,0.5));
-    }
-    @keyframes smFly {
-      0%   { left: -10%; top: 85%; opacity: 0; transform: rotate(-18deg); }
-      6%   { opacity: 0.5; }
-      92%  { opacity: 0.3; }
-      100% { left: 110%; top: 5%;  opacity: 0; transform: rotate(-18deg); }
-    }
-
-    /* Dotted route arc */
-    .route-arc {
-      position: absolute; z-index: 4;
-      top: 0; left: 0; width: 100%; height: 100%;
+      /* wide enough to cover the parabola from left edge to right edge */
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1000px, 95vw);
+      /* tall enough to show the arc above the title */
+      height: 340px;
+      top: 50%;
+      margin-top: -310px; /* arc height adjusted */
       pointer-events: none;
-      background: none;
-      animation: arcFade 12s ease-in-out infinite;
+      z-index: 20;
+      overflow: visible;
     }
-    .route-arc::after {
-      content: '';
-      position: absolute;
-      top: 68%; left: -5%;
-      width: 110%; height: 80%;
-      border-top: 1px dashed rgba(74,130,255,0.35);
-      border-radius: 0 0 0 0;
-      transform: rotate(-20deg);
-      transform-origin: left center;
-    }
-    @keyframes arcFade { 0%,100%{opacity:0} 18%,82%{opacity:1} }
 
-    /* Hero text */
-    .hero-content { position: relative; z-index: 10; }
-    .hero-title {
-      font-size: clamp(4.5rem, 11vw, 10rem);
-      font-weight: 900; letter-spacing: -0.05em; line-height: 1;
-      color: var(--white); margin-bottom: 14px;
-      animation: fadeUp 0.8s ease both;
-      text-shadow: 0 0 80px rgba(74,130,255,0.3);
+    /* The plane itself moves along a CSS motion path (parabola) */
+    .big-plane {
+      position: absolute;
+      width: 140px;
+      height: 82px;
+      top: 0; left: 0;
+      filter: drop-shadow(0 6px 20px rgba(13,31,60,0.18)) drop-shadow(0 0 12px rgba(255,255,255,0.5));
+      animation: parabolaFly 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+      transform-origin: center center;
     }
-    /* ✅ 기울기 없는 일반 Pretendard */
+
+    /* Parabola: plane enters bottom-left, arcs up over title, exits bottom-right */
+    /* We simulate a parabola with offset-path on modern browsers, fallback to keyframes */
+    @supports (offset-path: path('M0,0')) {
+      .big-plane {
+        animation: none;
+        /* Arc peak at y=-140 — well above the stage top edge, clears title */
+        offset-path: path('M -120 340 Q 500 -90 1120 340');
+        offset-rotate: auto;
+        animation: parabolaPath 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes parabolaPath {
+        0%   { offset-distance: 0%;   opacity: 0; }
+        5%   { opacity: 1; }
+        95%  { opacity: 1; }
+        100% { offset-distance: 100%; opacity: 0; }
+      }
+    }
+
+    /* Fallback keyframe animation for browsers without offset-path */
+    @keyframes parabolaFly {
+      0%   { left: -15%; top: 95%; opacity: 0;   transform: rotate(-20deg) scale(0.8); }
+      5%   { opacity: 1; }
+      25%  { left: 20%;  top: 30%; transform: rotate(-13deg) scale(0.95); }
+      50%  { left: 47%;  top: -15%; transform: rotate(0deg) scale(1); }
+      75%  { left: 75%;  top: 30%; transform: rotate(13deg) scale(0.95); }
+      95%  { opacity: 1; }
+      100% { left: 115%; top: 95%; opacity: 0;   transform: rotate(20deg) scale(0.8); }
+    }
+
+    /* Condensation trail — SVG drawn dynamically in JS */
+    .trail-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* ── HERO TITLE ── */
+    .hero-title {
+      font-size: clamp(5rem, 13vw, 11rem);
+      font-weight: 900; letter-spacing: -0.05em; line-height: 1;
+      color: #0D1F3C;
+      text-shadow: 0 2px 40px rgba(34,96,232,0.12);
+      position: relative; z-index: 9;
+      display: inline-block;
+    }
+
+    /* Each letter */
+    .tl {
+      display: inline-block;
+      opacity: 0;
+      animation: letterIn 0.7s ease forwards;
+    }
+    .tl:nth-child(1) { animation-delay: 0.05s; }
+    .tl:nth-child(2) { animation-delay: 0.15s; }
+    .tl:nth-child(3) { animation-delay: 0.25s; }
+    .tl:nth-child(4) { animation-delay: 0.35s; }
+    .tl:nth-child(5) { animation-delay: 0.45s; }
+    .tl:nth-child(6) { animation-delay: 0.55s; }
+
+    @keyframes letterIn {
+      0%   { opacity: 0; filter: blur(12px); transform: scale(1.04); }
+      100% { opacity: 1; filter: blur(0px);  transform: scale(1); }
+    }
     .hero-title-sub {
-      font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-      font-size: clamp(1.15rem, 2.5vw, 1.75rem);
-      font-weight: 400;
-      font-style: normal;
-      color: var(--text-muted);
-      letter-spacing: 0.01em; margin-bottom: 28px;
-      animation: fadeUp 0.8s 0.1s ease both;
+      font-size: clamp(1rem, 2.2vw, 1.5rem);
+      font-weight: 400; font-style: normal;
+      color: rgba(13,31,60,0.55);
+      letter-spacing: 0.01em; margin-bottom: 32px; margin-top: 10px;
+      animation: fadeUp 0.8s 0.12s ease both;
     }
     .hero-desc {
-      max-width: 500px; margin: 0 auto 44px;
-      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
-      line-height: 1.8; color: rgba(255,255,255,0.6);
-      animation: fadeUp 0.8s 0.2s ease both;
+      max-width: 480px; margin: 0 auto 48px;
+      font-size: clamp(0.9rem, 1.6vw, 1rem);
+      line-height: 1.85; color: rgba(13,31,60,0.45);
+      animation: fadeUp 0.8s 0.22s ease both;
     }
     .hero-btns {
       display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-      animation: fadeUp 0.8s 0.3s ease both;
+      animation: fadeUp 0.8s 0.32s ease both;
     }
     .btn-primary {
       background: var(--blue-bright); color: var(--white);
-      border: none; border-radius: 100px; padding: 15px 34px;
+      border: none; border-radius: 100px; padding: 15px 36px;
       font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: inherit;
       box-shadow: 0 6px 28px rgba(34,96,232,0.45);
       transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
     }
     .btn-primary:hover { transform: translateY(-2px); background: var(--blue-glow); box-shadow: 0 12px 36px rgba(74,130,255,0.5); }
     .btn-secondary {
-      background: rgba(255,255,255,0.07); color: var(--white);
-      border: 1.5px solid rgba(255,255,255,0.2); border-radius: 100px; padding: 15px 34px;
+      background: rgba(255,255,255,0.7); color: #0D1F3C;
+      border: 1.5px solid rgba(13,31,60,0.18); border-radius: 100px; padding: 15px 36px;
       font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit;
       transition: background 0.2s, border-color 0.2s;
     }
-    .btn-secondary:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.4); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.95); border-color: rgba(13,31,60,0.35); }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
 
     /* ── SECTION COMMON ── */
-    section { padding: 100px 6vw; position: relative; z-index: 2; }
     .section-label {
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--blue-glow); margin-bottom: 14px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--blue-bright); margin-bottom: 14px;
     }
     .section-title {
       font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 900; letter-spacing: -0.03em;
-      line-height: 1.15; margin-bottom: 16px; color: var(--white);
+      line-height: 1.15; margin-bottom: 16px; color: #0D1F3C;
     }
-    .section-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.8; max-width: 500px; }
+    .section-desc { font-size: 1rem; color: rgba(13,31,60,0.55); line-height: 1.8; max-width: 520px; }
 
-    /* ── SOLUTION ── */
-    #solution { background: #0B1A35; }
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
 
-    /* ✅ 제목이 여유롭게 한 줄로 — 2단 그리드 → 위아래 레이아웃으로 변경 */
-    .solution-header {
-      margin-bottom: 64px;
+    /* ══════════════════════════════════════════
+       FEATURE SECTIONS
+    ══════════════════════════════════════════ */
+    .feature-section {
+      padding: 110px 6vw;
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-bottom: 1px solid rgba(13,31,60,0.08);
+    }
+    .feature-section:nth-child(odd)  { background: #F7FAFE; }
+    .feature-section:nth-child(even) { background: #EDF4FD; }
+
+    .feature-section.reverse .feature-visual { order: -1; }
+
+    .feature-text .feature-num {
+      font-size: 5rem; font-weight: 900; letter-spacing: -0.06em;
+      line-height: 1;
+      background: linear-gradient(135deg, rgba(34,96,232,0.2), rgba(34,96,232,0.06));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: -12px;
+    }
+    .feature-text h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 900; letter-spacing: -0.04em;
+      line-height: 1.2; margin-bottom: 16px; color: #0D1F3C;
+    }
+    .feature-text p {
+      font-size: 1rem; color: rgba(13,31,60,0.55); line-height: 1.85;
+      margin-bottom: 28px; max-width: 440px;
+    }
+    .feature-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(34,96,232,0.08); border: 1px solid rgba(34,96,232,0.18);
+      color: var(--blue-bright); border-radius: 100px;
+      padding: 7px 18px; font-size: 0.8rem; font-weight: 700;
+    }
+
+    /* ── FEATURE VISUALS ── */
+    .feature-visual {
+      background: #fff;
+      border: 1px solid rgba(34,96,232,0.1);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 24px rgba(34,96,232,0.06), 0 1px 4px rgba(13,31,60,0.05);
+      min-height: 320px;
       display: flex; flex-direction: column; gap: 16px;
-    }
-    .solution-header .section-title {
-      /* 줄바꿈 없이 한 줄 표시, 크기 조금 키움 */
-      white-space: nowrap;
-      font-size: clamp(1.8rem, 3.5vw, 3rem);
-    }
-    .solution-header .section-desc { max-width: 640px; }
-
-    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .feature-card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 20px; padding: 32px 28px;
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
       position: relative; overflow: hidden;
     }
-    .feature-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--blue-bright), var(--blue-glow));
-      opacity: 0; transition: opacity 0.25s;
-    }
-    .feature-card:hover { transform: translateY(-5px); border-color: rgba(74,130,255,0.35); box-shadow: 0 16px 48px rgba(34,96,232,0.2); }
-    .feature-card:hover::before { opacity: 1; }
-    .feature-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      background: rgba(34,96,232,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; margin-bottom: 18px;
-    }
-    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .feature-card p  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; }
+    .feature-visual::before { display: none; }
 
-    /* ── HOW IT WORKS ── */
-    #how { background: var(--blue-deep); }
-    .how-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .steps { display: flex; flex-direction: column; position: relative; }
-    .steps::before {
-      content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 2px;
-      background: linear-gradient(to bottom, var(--blue-bright), rgba(34,96,232,0.05));
+    /* Visual 1 — GPS Map */
+    .vis-map-wrap {
+      width: 100%; height: 200px; position: relative;
+      background: #EEF5FF; border-radius: 14px; overflow: hidden;
     }
-    .step { display: flex; gap: 28px; align-items: flex-start; padding-bottom: 44px; }
-    .step-num {
-      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
-      background: var(--blue-bright); color: var(--white);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; font-weight: 900; z-index: 1;
-      box-shadow: 0 0 0 6px rgba(34,96,232,0.15);
-    }
-    .step-content h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; padding-top: 10px; }
-    .step-content p  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; }
-
-    /* ── APP PREVIEW MOCK ── */
-    .how-visual {
-      background: linear-gradient(140deg, rgba(26,71,200,0.18), rgba(10,22,40,0.9));
-      border: 1px solid rgba(74,130,255,0.22);
-      border-radius: 24px; padding: 20px;
-      display: flex; flex-direction: column; gap: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    }
-    .app-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 4px 2px 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .app-header-left { display: flex; align-items: center; gap: 10px; }
-    .app-back { font-size: 1.4rem; color: var(--blue-glow); font-weight: 300; line-height: 1; }
-    .app-title { font-size: 0.9rem; font-weight: 700; }
-    .app-date  { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
-    .app-badge {
-      background: linear-gradient(135deg, var(--blue-bright), var(--blue-glow));
-      color: white; font-size: 0.65rem; font-weight: 700;
-      padding: 3px 10px; border-radius: 100px;
-      letter-spacing: 0.04em;
-    }
-
-    .mock-map {
-      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-      border-radius: 12px; height: 110px; position: relative; overflow: hidden;
-    }
-    .mock-map-bg {
+    .vis-map-grid {
       position: absolute; inset: 0;
       background:
-        repeating-linear-gradient(0deg,   transparent, transparent 24px, rgba(255,255,255,0.025) 24px, rgba(255,255,255,0.025) 25px),
-        repeating-linear-gradient(90deg,  transparent, transparent 24px, rgba(255,255,255,0.025) 24px, rgba(255,255,255,0.025) 25px);
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(34,96,232,0.05) 28px, rgba(34,96,232,0.05) 29px),
+        repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(34,96,232,0.05) 28px, rgba(34,96,232,0.05) 29px);
+    }
+    .map-dot {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .map-dot::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 50%;
+      border: 1.5px solid currentColor; opacity: 0.4;
+      animation: ripple 2s ease-out infinite;
+    }
+    @keyframes ripple {
+      0% { transform: scale(1); opacity: 0.4; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+    .map-path { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .vis-stat-row { display: flex; gap: 12px; }
+    .vis-stat {
+      flex: 1; background: #F4F9FF; border: 1px solid rgba(34,96,232,0.1);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .vis-stat-num { font-size: 1.4rem; font-weight: 900; color: #0D1F3C; letter-spacing: -0.03em; }
+    .vis-stat-label { font-size: 0.7rem; color: rgba(13,31,60,0.5); margin-top: 3px; font-weight: 500; }
+
+    /* Visual 2 — AI Classification */
+    .vis-photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .vis-photo {
+      aspect-ratio: 1; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; position: relative; overflow: hidden;
+    }
+    .vis-photo-tag {
+      position: absolute; bottom: 5px; left: 5px; right: 5px;
+      background: rgba(0,0,0,0.55); border-radius: 5px;
+      font-size: 0.55rem; font-weight: 700; color: rgba(255,255,255,0.9);
+      padding: 2px 5px; text-align: center;
+    }
+    .vis-ai-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(34,96,232,0.07); border: 1px solid rgba(34,96,232,0.15);
+      border-radius: 12px; padding: 12px 16px;
+    }
+    .ai-pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--blue-bright);
+      animation: pulse 1.4s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
+    .vis-ai-bar span { font-size: 0.78rem; color: rgba(13,31,60,0.65); }
+
+    /* Visual 3 — Course Recommendation */
+    .vis-route { display: flex; flex-direction: column; gap: 10px; }
+    .vis-route-item {
+      display: flex; align-items: center; gap: 14px;
+      background: #F4F9FF; border: 1px solid rgba(13,31,60,0.08);
+      border-radius: 14px; padding: 14px 16px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .vis-route-item.active {
+      background: rgba(34,96,232,0.07); border-color: rgba(34,96,232,0.25);
+    }
+    .vis-route-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 900; flex-shrink: 0;
+    }
+    .vis-route-info h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; color: #0D1F3C; }
+    .vis-route-info p  { font-size: 0.7rem; color: rgba(13,31,60,0.5); }
+    .vis-route-time { margin-left: auto; font-size: 0.7rem; color: rgba(13,31,60,0.45); flex-shrink: 0; }
+
+    /* Visual 4 — Photo Spot Guide */
+    .vis-spot-card {
+      border-radius: 14px; overflow: hidden;
+      background: #F4F9FF; border: 1px solid rgba(13,31,60,0.08);
+    }
+    .vis-spot-img {
+      height: 130px; display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      background: linear-gradient(135deg, #C8DEFF, #E8F2FF);
+      position: relative;
+    }
+    .vis-spot-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: #E8940A; color: #fff;
+      font-size: 0.6rem; font-weight: 800;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .vis-spot-body { padding: 14px 16px; }
+    .vis-spot-body h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; color: #0D1F3C; }
+    .vis-spot-tips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .vis-tip-chip {
+      background: rgba(34,96,232,0.08); border: 1px solid rgba(34,96,232,0.15);
+      color: var(--blue-bright); font-size: 0.65rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
     }
 
-    /* Timeline */
-    .timeline { display: flex; flex-direction: column; gap: 0; }
-    .tl-item  { display: flex; gap: 10px; margin-bottom: 6px; }
-    .tl-left  { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
-    .tl-dot   { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-    .tl-line  { width: 2px; flex: 1; background: rgba(255,255,255,0.08); margin-top: 4px; margin-bottom: -6px; min-height: 20px; }
-    .tl-card  {
-      flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+    /* ══════════════════════════════════════════
+       RECORDING PROCESS SECTION
+    ══════════════════════════════════════════ */
+    #process {
+      padding: 120px 6vw;
+      background: #F7FAFE;
+      position: relative; z-index: 2;
     }
-    .tl-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-    .tl-place { font-size: 0.82rem; font-weight: 700; }
-    .tl-time  { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
-    .tl-photos { display: flex; align-items: center; gap: 5px; }
-    .photo-thumb {
-      width: 30px; height: 30px; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
-      flex-shrink: 0;
+    #process::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(34,96,232,0.05), transparent 70%);
     }
-    .photo-count {
-      font-size: 0.68rem; font-weight: 700; color: var(--blue-glow);
-      background: rgba(74,130,255,0.15); border-radius: 6px;
-      padding: 4px 6px;
+    .process-header { text-align: center; margin-bottom: 80px; }
+    .process-header .section-title { margin-bottom: 14px; }
+
+    .process-timeline { position: relative; max-width: 860px; margin: 0 auto; }
+    .process-timeline::before {
+      content: ''; position: absolute;
+      left: 50%; top: 0; bottom: 0; width: 2px;
+      transform: translateX(-50%);
+      background: linear-gradient(to bottom, transparent, var(--blue-bright) 10%, var(--blue-bright) 90%, transparent);
+      opacity: 0.2;
     }
-    .tl-ai-note { display: flex; gap: 7px; align-items: flex-start; }
-    .ai-tag {
-      background: linear-gradient(135deg, var(--blue-bright), var(--blue-glow));
-      color: white; font-size: 0.6rem; font-weight: 800;
-      padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 1px;
-      letter-spacing: 0.04em;
+
+    .process-step {
+      display: grid; grid-template-columns: 1fr 56px 1fr;
+      gap: 0; margin-bottom: 56px; align-items: start;
     }
-    .ai-text { font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; }
+    .process-step:last-child { margin-bottom: 0; }
+    .ps-left  { padding-right: 36px; text-align: right; padding-top: 8px; }
+    .ps-right { padding-left: 36px; text-align: left; padding-top: 8px; }
+    .ps-center { display: flex; flex-direction: column; align-items: center; }
+    .ps-circle {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-bright), #4A82FF);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 0 8px rgba(34,96,232,0.08), 0 8px 28px rgba(34,96,232,0.2);
+      flex-shrink: 0; z-index: 2; position: relative;
+    }
+    .ps-connector {
+      width: 2px; flex: 1; min-height: 40px;
+      background: linear-gradient(to bottom, var(--blue-bright), transparent);
+      opacity: 0.15; margin-top: 6px;
+    }
+    .ps-tag {
+      display: inline-block;
+      background: rgba(34,96,232,0.08); border: 1px solid rgba(34,96,232,0.18);
+      color: var(--blue-bright); border-radius: 100px;
+      padding: 3px 12px; font-size: 0.65rem; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .ps-title { font-size: 1.1rem; font-weight: 900; color: #0D1F3C; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .ps-desc  { font-size: 0.875rem; color: rgba(13,31,60,0.55); line-height: 1.8; }
+
+    /* ── HOW IT WORKS — ILLUSTRATED ── */
+    #how { padding: 110px 6vw; background: #EDF4FD; position: relative; z-index: 2; }
+
+    .how-steps-grid {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr 48px 1fr;
+      gap: 0;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .how-step {
+      background: #fff;
+      border: 1px solid rgba(34,96,232,0.1);
+      border-radius: 20px;
+      padding: 32px 28px 28px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(34,96,232,0.06), 0 1px 4px rgba(13,31,60,0.04);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+    .how-step:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(34,96,232,0.1);
+    }
+
+    .how-step-ill {
+      width: 100%;
+      aspect-ratio: 1.3;
+      margin: 0 auto 20px;
+      max-width: 200px;
+    }
+    .how-step-ill svg { width: 100%; height: 100%; }
+
+    .how-step-num {
+      font-size: 0.65rem; font-weight: 900; letter-spacing: 0.12em;
+      color: #2260E8; background: rgba(34,96,232,0.08);
+      border-radius: 100px; padding: 3px 12px;
+      display: inline-block; margin-bottom: 10px;
+    }
+    .how-step-title {
+      font-size: 1.05rem; font-weight: 900; color: #0D1F3C;
+      margin-bottom: 10px; letter-spacing: -0.02em;
+    }
+    .how-step-desc {
+      font-size: 0.875rem; color: rgba(13,31,60,0.55); line-height: 1.75;
+    }
+
+    .how-arrow {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .how-arrow svg { width: 48px; }
+
+    @media (max-width: 960px) {
+      .how-steps-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 16px;
+        max-width: 440px;
+      }
+      .how-arrow { transform: rotate(90deg); }
+    }
 
     /* ── METRICS ── */
-    #metrics { background: #0B1A35; }
+    #metrics { padding: 110px 6vw; background: #F7FAFE; position: relative; z-index: 2; }
     .metrics-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
     .metrics-grid  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .metric-card {
-      background: var(--card-bg); border: 1px solid var(--border);
+      background: #fff; border: 1px solid rgba(34,96,232,0.1);
       border-radius: 18px; padding: 28px 22px;
-      transition: transform 0.25s, border-color 0.25s;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
     }
-    .metric-card:hover { transform: translateY(-3px); border-color: rgba(74,130,255,0.3); }
+    .metric-card:hover { transform: translateY(-3px); border-color: rgba(34,96,232,0.22); box-shadow: 0 8px 32px rgba(34,96,232,0.09); }
     .metric-num {
       font-size: 2.4rem; font-weight: 900; letter-spacing: -0.04em;
-      background: linear-gradient(135deg, var(--white), var(--blue-glow));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
+      color: var(--blue-bright); margin-bottom: 6px;
     }
-    .metric-label { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; font-weight: 500; }
+    .metric-label { font-size: 0.8rem; color: rgba(13,31,60,0.55); line-height: 1.55; font-weight: 500; }
     .metric-tag {
       display: inline-block; margin-top: 10px;
-      background: rgba(74,130,255,0.15); color: var(--blue-glow);
+      background: rgba(34,96,232,0.08); color: var(--blue-bright);
       border-radius: 100px; padding: 3px 12px; font-size: 0.68rem; font-weight: 700;
     }
 
     /* ── CTA ── */
     #cta {
-      background: var(--blue-deep); text-align: center; padding: 120px 6vw;
-      position: relative; overflow: hidden;
+      background: #EDF4FD;
+      text-align: center; padding: 130px 6vw 120px;
+      position: relative; overflow: hidden; z-index: 2;
     }
     #cta::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(26,71,200,0.28), transparent 70%);
-    }
-    .cta-plane-svg {
-      position: absolute; width: 64px; height: 64px; pointer-events: none;
-      animation: ctaFly 13s linear 2s infinite;
-      filter: drop-shadow(0 0 10px rgba(74,130,255,0.4));
-      opacity: 0.45;
-    }
-    @keyframes ctaFly {
-      0%   { left:-6%; top:22%; opacity:0; transform:rotate(-5deg); }
-      6%   { opacity:0.45; }
-      94%  { opacity:0.3; }
-      100% { left:106%; top:16%; opacity:0; transform:rotate(-5deg); }
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(34,96,232,0.1), transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 10%, rgba(74,130,255,0.06), transparent 60%);
     }
     .cta-inner { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
-    .cta-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
-    .cta-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -0.03em; color: var(--white); margin-bottom: 16px; line-height: 1.15; }
-    .cta-desc   { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 40px; line-height: 1.75; }
-    .email-form {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 20px; padding: 28px 28px 24px;
-      max-width: 480px; margin: 0 auto;
-      display: flex; flex-direction: column; gap: 12px;
+    .cta-label {
+      display: inline-block; margin-bottom: 24px;
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #2260E8;
+      border: 1px solid rgba(34,96,232,0.2);
+      padding: 5px 16px; border-radius: 100px;
+      background: rgba(34,96,232,0.06);
     }
-    .email-input {
-      background: transparent; border: none; outline: none;
-      font-family: inherit; font-size: 1rem; color: var(--white);
-      padding: 6px 4px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      transition: border-color 0.2s;
+    .cta-title {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900; letter-spacing: -0.04em;
+      color: #0D1F3C; margin-bottom: 20px; line-height: 1.1;
     }
-    .email-input::placeholder { color: rgba(255,255,255,0.35); }
-    .email-input:focus { border-bottom-color: var(--blue-glow); }
+    .cta-title .hl { color: #2260E8; }
+    .cta-desc { color: rgba(13,31,60,0.5); font-size: 1.05rem; margin-bottom: 48px; line-height: 1.8; }
+    .cta-stats {
+      display: flex; justify-content: center; gap: 0;
+      margin-bottom: 52px;
+      border: 1px solid rgba(34,96,232,0.12);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,0.7);
+    }
+    .cta-stat {
+      flex: 1; padding: 20px 16px;
+      border-right: 1px solid rgba(34,96,232,0.08);
+    }
+    .cta-stat:last-child { border-right: none; }
+    .cta-stat-num { font-size: 1.7rem; font-weight: 900; color: #2260E8; letter-spacing: -0.04em; line-height: 1; }
+    .cta-stat-label { font-size: 0.68rem; color: rgba(13,31,60,0.45); margin-top: 5px; line-height: 1.4; }
+    .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .btn-cta {
-      background: linear-gradient(135deg, var(--blue-bright), var(--blue-glow));
-      color: var(--white); border: none; border-radius: 100px;
-      padding: 16px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit;
-      box-shadow: 0 8px 32px rgba(34,96,232,0.45);
+      display: inline-block;
+      background: linear-gradient(135deg, #2260E8, #4A82FF);
+      color: #fff; border: none; border-radius: 100px;
+      padding: 18px 44px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit;
+      box-shadow: 0 8px 32px rgba(34,96,232,0.3);
       transition: transform 0.2s, box-shadow 0.2s;
-      width: 100%;
     }
-    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 44px rgba(74,130,255,0.5); }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 44px rgba(34,96,232,0.4); }
+    .btn-cta-ghost {
+      display: inline-block;
+      background: rgba(255,255,255,0.7);
+      color: #0D1F3C; border: 1.5px solid rgba(13,31,60,0.15); border-radius: 100px;
+      padding: 17px 36px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-cta-ghost:hover { background: rgba(255,255,255,0.95); border-color: rgba(13,31,60,0.28); }
 
     /* ── FOOTER ── */
     footer {
-      background: #060E1E; padding: 32px 6vw;
+      background: #EDF4FD; padding: 32px 6vw;
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(34,96,232,0.1);
+      position: relative; z-index: 2;
     }
-    .footer-logo { font-size: 1.1rem; font-weight: 900; }
+    .footer-logo { font-size: 1.1rem; font-weight: 900; color: #0D1F3C; }
     .footer-logo span { color: var(--gold); }
-    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.25); }
+    .footer-copy { font-size: 0.78rem; color: rgba(13,31,60,0.35); }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(24px); }
-      to   { opacity:1; transform:translateY(0); }
+    /* ── PHONE MOCKUP ANIMATIONS ── */
+    /* 폰이 처음 나타날 때 위에서 살짝 내려오며 페이드인 */
+    .phone-mockup-wrap {
+      animation: phoneDrop 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s both;
     }
-    .reveal { opacity:0; transform:translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
-    .reveal.visible { opacity:1; transform:translateY(0); }
+    @keyframes phoneDrop {
+      from { opacity: 0; transform: translateY(-18px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    /* 앨범 카드 하나씩 순서대로 나타나는 효과 */
+    .album-card {
+      animation: cardFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .album-card:nth-child(1) { animation-delay: 0.35s; }
+    .album-card:nth-child(2) { animation-delay: 0.48s; }
+    .album-card:nth-child(3) { animation-delay: 0.61s; }
+    .album-card:nth-child(4) { animation-delay: 0.74s; }
+    .album-card:nth-child(5) { animation-delay: 0.87s; }
+    .album-card:nth-child(6) { animation-delay: 1.00s; }
+    @keyframes cardFadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* 첫 번째 카드(일본)에 미묘한 shimmer 효과 */
+    .album-card-active::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 13px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.3);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%,100% { opacity: 0; }
+      50%      { opacity: 1; }
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
-      .solution-header .section-title { white-space: normal; }
-      .features-grid  { grid-template-columns: 1fr; }
-      .how-inner      { grid-template-columns: 1fr; }
-      .metrics-inner  { grid-template-columns: 1fr; gap: 40px; }
-      .nav-links      { display: none; }
+      .feature-section { grid-template-columns: 1fr; gap: 40px; }
+      .feature-section.reverse .feature-visual { order: 0; }
+      .how-inner { grid-template-columns: 1fr; }
+      .metrics-inner { grid-template-columns: 1fr; gap: 40px; }
+      .nav-links { display: none; }
+      .process-step {
+        grid-template-columns: 32px 1fr;
+        grid-template-rows: auto auto;
+        gap: 0 16px;
+      }
+      .process-timeline::before { left: 16px; }
+      .ps-left  { display: none; }
+      .ps-center { align-items: flex-start; }
+      .ps-circle { width: 32px; height: 32px; font-size: 0.9rem; }
+      .ps-right { padding-left: 0; grid-column: 2; }
+      .process-step:nth-child(odd) .ps-left { display: none; }
+      .process-step:nth-child(odd) .ps-right { display: block; grid-column: 2; text-align: left; padding-left: 0; }
     }
     @media (max-width: 600px) {
       .metrics-grid { grid-template-columns: 1fr; }
-      .plane-svg    { width: 72px; height: 72px; }
+      .big-plane { width: 90px; height: 53px; }
+      .plane-stage { height: 240px; margin-top: -210px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- STARS -->
-  <div class="stars" id="stars"></div>
+  <div class="clouds" id="clouds"></div>
 
   <!-- NAV -->
   <nav>
     <div class="nav-logo">TRIP<span>ON</span></div>
     <ul class="nav-links">
-      <li><a href="#solution">기능</a></li>
+      <li><a href="#feature-1">기능</a></li>
       <li><a href="#how">사용 방법</a></li>
       <li><a href="#metrics">목표</a></li>
     </ul>
     <button class="nav-cta" onclick="window.open('https://forms.gle/FcSPwBpX26vCAH3B6','_blank')">출시 알림 받기</button>
   </nav>
 
-  <!-- HERO -->
+  <!-- ══ HERO ══ -->
   <section id="hero">
     <div class="hero-sky"></div>
     <div class="hero-orb orb1"></div>
@@ -478,281 +684,193 @@
     <div class="hero-orb orb3"></div>
     <div class="hero-horizon"></div>
 
-    <!-- Airplane layer -->
-    <div class="plane-wrapper">
-      <!-- Twin condensation trails -->
-      <div class="trail"></div>
-      <div class="trail2"></div>
-
-      <!-- Wide-body airliner — large detailed side view -->
-      <svg class="plane-svg" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- ── FUSELAGE ── -->
-        <path d="M30 95 C30 85 80 75 160 72 C220 70 270 74 295 82 C308 87 308 101 295 106 C270 114 220 118 160 116 C80 113 30 103 30 95 Z" fill="white" opacity="0.97"/>
-        <!-- Fuselage belly shade -->
-        <path d="M30 98 C30 103 80 113 160 116 C220 118 270 114 295 106 C270 112 220 115 160 113 C80 110 30 102 30 98 Z" fill="#C8DEFF" opacity="0.4"/>
-        <!-- Nose cone -->
-        <path d="M295 106 C310 103 318 98 318 91 C318 84 310 80 295 82 Z" fill="#DDEEFF" opacity="0.95"/>
-        <!-- Nose lower curve -->
-        <path d="M295 106 C310 103 318 98 295 82 C285 84 275 86 275 89 C275 94 285 104 295 106 Z" fill="#EEF5FF" opacity="0.5"/>
-
-        <!-- ── MAIN WING (large swept) ── -->
-        <path d="M110 108 L55 162 L75 162 L145 112 Z" fill="white" opacity="0.92"/>
-        <path d="M145 112 L75 162 L130 162 L155 113 Z" fill="#C8DEFF" opacity="0.65"/>
-        <!-- Wing upper surface highlight -->
-        <path d="M112 106 C130 104 148 108 155 110 L145 112 L110 108 Z" fill="white" opacity="0.5"/>
-        <!-- Winglet -->
-        <path d="M55 162 L50 148 L62 148 L75 162 Z" fill="white" opacity="0.8"/>
-        <path d="M62 148 L58 138 L66 140 L68 148 Z" fill="#DDEEFF" opacity="0.6"/>
-
-        <!-- ── HORIZONTAL STABILIZER ── -->
-        <path d="M38 94 L20 118 L32 118 L54 96 Z" fill="white" opacity="0.85"/>
-        <path d="M54 96 L32 118 L55 118 L62 97 Z" fill="#C8DEFF" opacity="0.55"/>
-
-        <!-- ── VERTICAL TAIL FIN ── -->
-        <path d="M35 92 L22 58 L38 56 L55 90 Z" fill="white" opacity="0.9"/>
-        <path d="M38 56 L46 56 L55 90 L50 91 Z" fill="#DDEEFF" opacity="0.55"/>
-        <!-- Tail logo circle -->
-        <circle cx="38" cy="70" r="7" fill="#2260E8" opacity="0.6"/>
-        <circle cx="38" cy="70" r="4" fill="#4A82FF" opacity="0.7"/>
-
-        <!-- ── ENGINE POD 1 (main) ── -->
-        <ellipse cx="120" cy="120" rx="22" ry="8" fill="#AACCEE" opacity="0.85"/>
-        <ellipse cx="120" cy="120" rx="12" ry="7" fill="#7EB0DD" opacity="0.7"/>
-        <ellipse cx="100" cy="120" rx="7" ry="8" fill="#90BBDD" opacity="0.75"/>
-        <!-- Engine intake highlight -->
-        <path d="M100 112 Q107 116 100 128 Q96 128 96 120 Z" fill="white" opacity="0.25"/>
-        <!-- Engine pylon -->
-        <path d="M115 112 L117 108 L125 108 L123 113 Z" fill="#DDEEFF" opacity="0.5"/>
-
-        <!-- ── ENGINE POD 2 (outer, smaller) ── -->
-        <ellipse cx="80" cy="136" rx="16" ry="6" fill="#AACCEE" opacity="0.7"/>
-        <ellipse cx="80" cy="136" rx="8" ry="5.5" fill="#7EB0DD" opacity="0.6"/>
-        <ellipse cx="66" cy="136" rx="5" ry="6" fill="#90BBDD" opacity="0.65"/>
-        <path d="M77 130 L79 127 L85 127 L83 131 Z" fill="#DDEEFF" opacity="0.4"/>
-
-        <!-- ── WINDOWS ROW ── -->
-        <rect x="155" y="80" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.8"/>
-        <rect x="170" y="79" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.8"/>
-        <rect x="185" y="78" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.8"/>
-        <rect x="200" y="77" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.8"/>
-        <rect x="215" y="77" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.8"/>
-        <rect x="230" y="76" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.75"/>
-        <rect x="245" y="76" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.75"/>
-        <rect x="260" y="76" width="8" height="6" rx="2" fill="#A8D4FF" opacity="0.7"/>
-        <rect x="275" y="77" width="7" height="6" rx="2" fill="#A8D4FF" opacity="0.7"/>
-
-        <!-- ── DOORS ── -->
-        <rect x="144" y="78" width="8" height="10" rx="1.5" fill="none" stroke="#A8D4FF" stroke-width="1" opacity="0.55"/>
-        <rect x="280" y="82" width="7" height="9" rx="1.5" fill="none" stroke="#A8D4FF" stroke-width="1" opacity="0.45"/>
-
-        <!-- ── FUSELAGE STRIPE ── -->
-        <path d="M60 107 Q160 104 295 95" stroke="#4A82FF" stroke-width="1.5" opacity="0.3" fill="none"/>
-        <path d="M60 109 Q160 106 295 97" stroke="#4A82FF" stroke-width="0.8" opacity="0.2" fill="none"/>
-
-        <!-- ── BELLY LANDING GEAR DOORS ── -->
-        <rect x="105" y="110" width="18" height="5" rx="2" fill="#DDEEFF" opacity="0.25"/>
-      </svg>
-
-      <!-- Gold small plane — simplified classic -->
-      <svg class="plane-sm" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 95 C30 85 80 75 160 72 C220 70 270 74 295 82 C308 87 308 101 295 106 C270 114 220 118 160 116 C80 113 30 103 30 95 Z" fill="#F5A623" opacity="0.9"/>
-        <path d="M295 106 C310 103 318 98 318 91 C318 84 310 80 295 82 Z" fill="#FFD580" opacity="0.9"/>
-        <path d="M110 108 L55 162 L130 162 L155 113 Z" fill="#F5A623" opacity="0.8"/>
-        <path d="M38 94 L20 118 L55 118 L62 97 Z" fill="#F5A623" opacity="0.75"/>
-        <path d="M35 92 L22 58 L55 90 Z" fill="#F5A623" opacity="0.85"/>
-        <ellipse cx="120" cy="120" rx="22" ry="8" fill="#E8941A" opacity="0.7"/>
-        <rect x="185" y="78" width="8" height="6" rx="2" fill="#FFF0CC" opacity="0.7"/>
-        <rect x="215" y="77" width="8" height="6" rx="2" fill="#FFF0CC" opacity="0.7"/>
-        <rect x="245" y="76" width="8" height="6" rx="2" fill="#FFF0CC" opacity="0.7"/>
-      </svg>
-
-      <!-- Dotted route arc -->
-      <div class="route-arc"></div>
-    </div>
-
     <div class="hero-content">
-      <h1 class="hero-title">TRIPON</h1>
-      <p class="hero-title-sub">기록되는 여행, 이어지는 동선</p>
+
+      <!-- Plane stage: positioned so the parabola arc passes just above "TRIPON" -->
+      <div class="plane-stage" id="planeStage">
+        <!-- Condensation trail canvas -->
+        <svg class="trail-canvas" id="trailCanvas" viewBox="0 0 1000 340" preserveAspectRatio="none"></svg>
+
+        <!-- The one big airplane — Style F (3/4 perspective) -->
+        <svg class="big-plane" id="bigPlane" viewBox="0 0 210 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12,52 Q12,44 44,40 Q96,34 148,36 Q168,36 178,44 Q184,50 178,58 Q168,66 148,68 Q96,70 44,66 Q12,62 12,56 Z" fill="white" opacity="0.97"/>
+          <path d="M178,44 Q192,50 192,52 Q192,54 178,58 Q185,52 178,44 Z" fill="#DDEEFF" opacity="0.85"/>
+          <path d="M44,40 Q96,30 148,32 Q168,32 178,40 L178,44 Q168,36 148,36 Q96,34 44,40 Z" fill="white" opacity="0.55"/>
+          <path d="M86,58 L30,94 L62,94 L106,64 Z" fill="white" opacity="0.9"/>
+          <path d="M86,58 L62,94 L82,94 L106,64 Z" fill="#B8CCEE" opacity="0.55"/>
+          <path d="M88,56 L36,84 L30,94 L86,58 Z" fill="white" opacity="0.4"/>
+          <path d="M22,52 L8,64 L22,64 L30,56 Z" fill="white" opacity="0.82"/>
+          <path d="M18,50 L12,26 L28,26 L32,50 Z" fill="white" opacity="0.9"/>
+          <path d="M12,26 L18,20 L28,22 L28,26 Z" fill="white" opacity="0.5"/>
+          <ellipse cx="68" cy="72" rx="18" ry="6" fill="#AACCEE" opacity="0.82"/>
+          <ellipse cx="52" cy="72" rx="6" ry="6" fill="#90BBDD" opacity="0.78"/>
+          <path d="M74,62 L76,58 L82,58 L80,63 Z" fill="#DDEEFF" opacity="0.45"/>
+          <rect x="106" y="39" width="7" height="4" rx="1" fill="#A8D4FF" opacity="0.85"/>
+          <rect x="118" y="38" width="7" height="4" rx="1" fill="#A8D4FF" opacity="0.82"/>
+          <rect x="130" y="37" width="7" height="4" rx="1" fill="#A8D4FF" opacity="0.80"/>
+          <rect x="142" y="37" width="7" height="4" rx="1" fill="#A8D4FF" opacity="0.75"/>
+          <rect x="154" y="37" width="6" height="4" rx="1" fill="#A8D4FF" opacity="0.70"/>
+          <path d="M44,54 Q100,50 178,46" stroke="#4A82FF" stroke-width="1.2" fill="none" opacity="0.3"/>
+        </svg>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="tl">T</span><span class="tl">R</span><span class="tl">I</span><span class="tl">P</span><span class="tl">O</span><span class="tl">N</span>
+      </h1>
+      <p class="hero-title-sub">여행은 당신이, 기록은 우리가 자동으로</p>
       <p class="hero-desc">사진 한 장 올리는 것만으로, AI가 여행 경로와 일지를 자동으로 완성합니다. 복잡한 정리는 이제 그만.</p>
       <div class="hero-btns">
-        <button class="btn-primary" onclick="document.getElementById('solution').scrollIntoView({behavior:'smooth'})">기능 알아보기</button>
-        <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">작동 방식 보기</button>
+        <button class="btn-primary" onclick="document.getElementById('feature-1').scrollIntoView({behavior:'smooth'})">기능 알아보기</button>
+        <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">사용 방법 보기</button>
       </div>
     </div>
   </section>
 
-  <!-- SOLUTION -->
-  <section id="solution">
-    <div class="solution-header">
-      <div class="section-label reveal">Solution</div>
-      <h2 class="section-title reveal">AI가 여행의 모든 기록을 대신합니다</h2>
-      <p class="section-desc reveal">사진의 GPS 위치 정보와 이동 경로를 분석해 자동으로 동선을 시각화하고, AI가 여행 일지까지 작성해줍니다.</p>
+  <!-- ══ FEATURE 1: 나라별 여행 기록 보관 ══ -->
+  <section class="feature-section" id="feature-1">
+    <div class="feature-text reveal">
+      <div class="feature-num">01</div>
+      <div class="section-label">Travel Archive</div>
+      <h2>나라별 여행 기록 보관</h2>
+      <p>방문한 나라마다 여행 기록이 자동으로 분류되어 보관됩니다. 언제든 꺼내보는 나만의 여행 앨범, 글 한 줄 쓸 필요가 없습니다.</p>
+      <div class="feature-tag">🗂️ 나라별 자동 보관</div>
     </div>
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon">🤖</div>
-        <h3>AI 여행 기록 자동 생성</h3>
-        <p>사진과 영상의 위치 정보를 바탕으로 여행 일지와 동선을 자동으로 정리합니다. 글 작성 부담 없이 완성된 기록이 만들어집니다.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon">📍</div>
-        <h3>사진 자동 분류·아카이빙</h3>
-        <p>GPS 기반 AI 자동 분류 시스템이 시간 & 장소 정보를 분석하여 사진을 동선별로 자동 분류하고 저장합니다.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon">🗺️</div>
-        <h3>개인화 여행 코스 추천</h3>
-        <p>사용자의 취향과 여행 테마를 반영해 맞춤형 동선을 추천하고, 완성된 코스를 SNS와 캘린더로 바로 공유할 수 있습니다.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon">📸</div>
-        <h3>포토 스팟 & 촬영 가이드</h3>
-        <p>지역별 인기 촬영 장소와 추천 포즈, 구도 정보를 제공하여 여행 현장에서의 경험까지 확장합니다.</p>
-      </div>
-    </div>
-  </section>
+    <div class="feature-visual reveal" style="display:flex;align-items:center;justify-content:center;background:transparent;border:none;box-shadow:none;padding:0;">
+      <!-- Phone outer shell — 9:19.5 ratio -->
+      <div class="phone-mockup-wrap" style="
+        width:260px;
+        background:#161622;
+        border-radius:46px;
+        padding:10px;
+        box-shadow:
+          0 0 0 1px #080810,
+          0 0 0 2.5px #28283C,
+          0 36px 90px rgba(10,16,40,0.38),
+          inset 0 1px 0 rgba(255,255,255,0.07);
+        position:relative;
+        flex-shrink:0;
+      ">
+        <!-- Side buttons -->
+        <div style="position:absolute;left:-3.5px;top:88px;width:3.5px;height:26px;background:#28283C;border-radius:2px 0 0 2px;"></div>
+        <div style="position:absolute;left:-3.5px;top:124px;width:3.5px;height:48px;background:#28283C;border-radius:2px 0 0 2px;"></div>
+        <div style="position:absolute;left:-3.5px;top:184px;width:3.5px;height:48px;background:#28283C;border-radius:2px 0 0 2px;"></div>
+        <div style="position:absolute;right:-3.5px;top:130px;width:3.5px;height:62px;background:#28283C;border-radius:0 2px 2px 0;"></div>
 
-  <!-- HOW IT WORKS -->
-  <section id="how">
-    <div class="how-inner">
-      <div>
-        <div class="section-label reveal">How It Works</div>
-        <h2 class="section-title reveal" style="white-space:nowrap;font-size:clamp(1.6rem,3vw,2.8rem)">3단계로 완성되는 나만의 여행 기록</h2>
-        <div class="steps" style="margin-top:40px">
-          <div class="step reveal">
-            <div class="step-num">1</div>
-            <div class="step-content">
-              <h3>여행 중 자동 기록</h3>
-              <p>앱을 켜두기만 하면 GPS가 이동 경로를 실시간으로 기록합니다. 사진을 찍으면 위치 데이터가 함께 저장됩니다.</p>
-            </div>
-          </div>
-          <div class="step reveal">
-            <div class="step-num">2</div>
-            <div class="step-content">
-              <h3>AI 자동 분류 & 정리</h3>
-              <p>여행 후 사진을 업로드하면 AI가 시간과 장소 정보를 분석해 동선별로 자동 분류하고 타임라인을 구성합니다.</p>
-            </div>
-          </div>
-          <div class="step reveal">
-            <div class="step-num">3</div>
-            <div class="step-content">
-              <h3>완성된 여행 일지 확인 & 공유</h3>
-              <p>AI가 자동 작성한 여행 일지와 동선 지도를 확인하고, SNS나 친구들과 바로 공유하세요.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="how-visual reveal">
+        <!-- Screen -->
+        <div style="background:#fff;border-radius:38px;overflow:hidden;position:relative;">
 
-        <!-- App header bar -->
-        <div class="app-header">
-          <div class="app-header-left">
-            <div class="app-back">‹</div>
+          <!-- Status bar -->
+          <div style="background:#F7FAFE;padding:12px 18px 5px;display:flex;align-items:center;justify-content:space-between;position:relative;min-height:36px;">
+            <span style="font-size:0.7rem;font-weight:700;color:#0D1F3C;letter-spacing:-0.02em;z-index:1;">9:41</span>
+            <!-- Dynamic island -->
+            <div style="width:76px;height:24px;background:#161622;border-radius:0 0 16px 16px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:3;"></div>
+            <!-- Right icons -->
+            <div style="display:flex;gap:5px;align-items:center;z-index:1;">
+              <!-- Signal bars -->
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+                <rect x="0" y="6" width="2.5" height="4" rx="0.8" fill="#0D1F3C" opacity="0.5"/>
+                <rect x="3.5" y="4" width="2.5" height="6" rx="0.8" fill="#0D1F3C" opacity="0.65"/>
+                <rect x="7" y="2" width="2.5" height="8" rx="0.8" fill="#0D1F3C" opacity="0.8"/>
+                <rect x="10.5" y="0" width="2.5" height="10" rx="0.8" fill="#0D1F3C"/>
+              </svg>
+              <!-- WiFi -->
+              <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+                <path d="M6.5 8 L6.5 8" stroke="#0D1F3C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 6 Q6.5 4 9 6" stroke="#0D1F3C" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.75"/>
+                <path d="M1.5 3.5 Q6.5 0 11.5 3.5" stroke="#0D1F3C" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+              </svg>
+              <!-- Battery -->
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
+                <rect x="0" y="1.5" width="17" height="7" rx="2" stroke="#0D1F3C" stroke-width="1" opacity="0.7"/>
+                <rect x="17.5" y="3.5" width="2" height="3" rx="1" fill="#0D1F3C" opacity="0.5"/>
+                <rect x="1.5" y="3" width="11" height="4" rx="1" fill="#0D1F3C" opacity="0.8"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- App header -->
+          <div style="background:#F7FAFE;padding:4px 18px 12px;display:flex;align-items:center;justify-content:space-between;">
             <div>
-              <div class="app-title">서울 여행 Day 1</div>
-              <div class="app-date">2025년 10월 16일 · 3개 장소</div>
+              <div style="font-size:0.55rem;color:rgba(13,31,60,0.38);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">나의 여행</div>
+              <div style="font-size:1.1rem;font-weight:900;color:#0D1F3C;letter-spacing:-0.04em;line-height:1;">TRIP<span style="color:#E8940A;">ON</span></div>
             </div>
-          </div>
-          <div class="app-badge">AI 완성</div>
-        </div>
-
-        <!-- Mini map with route -->
-        <div class="mock-map">
-          <div class="mock-map-bg"></div>
-          <!-- SVG route curve -->
-          <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 300 110" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#2260E8"/>
-                <stop offset="100%" stop-color="#4A82FF"/>
-              </linearGradient>
-            </defs>
-            <path d="M 48 55 Q 110 30 150 58 Q 195 82 252 42" stroke="url(#routeGrad)" stroke-width="2.5" fill="none" stroke-dasharray="6 4" opacity="0.9"/>
-            <!-- Pin circles -->
-            <circle cx="48"  cy="55" r="6" fill="#2260E8" opacity="0.9"/>
-            <circle cx="150" cy="58" r="6" fill="#F5A623" opacity="0.9"/>
-            <circle cx="252" cy="42" r="6" fill="#34C97A" opacity="0.9"/>
-            <!-- Pin labels -->
-            <text x="48"  y="48" text-anchor="middle" font-size="8" fill="white" font-family="Pretendard,sans-serif" font-weight="700">1</text>
-            <text x="150" y="51" text-anchor="middle" font-size="8" fill="white" font-family="Pretendard,sans-serif" font-weight="700">2</text>
-            <text x="252" y="35" text-anchor="middle" font-size="8" fill="white" font-family="Pretendard,sans-serif" font-weight="700">3</text>
-          </svg>
-          <!-- Place name labels -->
-          <div style="position:absolute;bottom:8px;left:8px;font-size:0.65rem;color:rgba(255,255,255,0.55);font-weight:600">경복궁 → 북촌 한옥마을 → 명동</div>
-        </div>
-
-        <!-- Timeline entries -->
-        <div class="timeline">
-
-          <div class="tl-item">
-            <div class="tl-left">
-              <div class="tl-dot" style="background:#2260E8;box-shadow:0 0 8px #2260E8"></div>
-              <div class="tl-line"></div>
-            </div>
-            <div class="tl-card">
-              <div class="tl-card-top">
-                <div>
-                  <div class="tl-place">📍 경복궁</div>
-                  <div class="tl-time">09:30 AM — 11:10 AM</div>
-                </div>
-                <div class="tl-photos">
-                  <div class="photo-thumb" style="background:linear-gradient(135deg,#1A3A7A,#2260E8)">🏯</div>
-                  <div class="photo-thumb" style="background:linear-gradient(135deg,#0d2b5e,#1A47C8)">🌿</div>
-                  <div class="photo-count">+6</div>
-                </div>
-              </div>
-              <div class="tl-ai-note">
-                <span class="ai-tag">AI</span>
-                <span class="ai-text">조선 시대 대표 궁궐로, 맑은 날씨 속 근정전과 경회루를 둘러봤습니다. 사진 8장 자동 정리 완료.</span>
-              </div>
-            </div>
+            <!-- Profile avatar -->
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4A82FF,#2260E8);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">👤</div>
           </div>
 
-          <div class="tl-item">
-            <div class="tl-left">
-              <div class="tl-dot" style="background:#F5A623;box-shadow:0 0 8px #F5A623"></div>
-              <div class="tl-line"></div>
+          <!-- Album grid -->
+          <div style="padding:10px 11px 8px;background:#F7FAFE;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+
+            <div class="album-card album-card-active" style="aspect-ratio:1;border-radius:13px;overflow:hidden;position:relative;box-shadow:0 3px 12px rgba(13,31,60,0.12);">
+              <div style="width:100%;height:100%;background:linear-gradient(155deg,#FF9090 0%,#BB2020 100%);display:flex;align-items:center;justify-content:center;font-size:2.6rem;">🗾</div>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,transparent 52%);"></div>
+              <div style="position:absolute;bottom:7px;left:8px;right:8px;">
+                <div style="font-size:0.68rem;font-weight:800;color:white;line-height:1.25;">🇯🇵 일본</div>
+                <div style="font-size:0.52rem;color:rgba(255,255,255,0.68);">34장 · 2024.03</div>
+              </div>
             </div>
-            <div class="tl-card">
-              <div class="tl-card-top">
-                <div>
-                  <div class="tl-place">📍 북촌 한옥마을</div>
-                  <div class="tl-time">11:40 AM — 01:20 PM</div>
-                </div>
-                <div class="tl-photos">
-                  <div class="photo-thumb" style="background:linear-gradient(135deg,#5a3a1a,#8b5e2a)">🏘</div>
-                  <div class="photo-thumb" style="background:linear-gradient(135deg,#3a2a10,#6b4a20)">🪻</div>
-                  <div class="photo-count">+11</div>
-                </div>
+
+            <div class="album-card" style="aspect-ratio:1;border-radius:13px;overflow:hidden;position:relative;box-shadow:0 3px 12px rgba(13,31,60,0.12);">
+              <div style="width:100%;height:100%;background:linear-gradient(155deg,#7090E8 0%,#1A3898 100%);display:flex;align-items:center;justify-content:center;font-size:2.6rem;">🗼</div>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,transparent 52%);"></div>
+              <div style="position:absolute;bottom:7px;left:8px;right:8px;">
+                <div style="font-size:0.68rem;font-weight:800;color:white;line-height:1.25;">🇫🇷 프랑스</div>
+                <div style="font-size:0.52rem;color:rgba(255,255,255,0.68);">51장 · 2023.08</div>
               </div>
-              <div class="tl-ai-note">
-                <span class="ai-tag">AI</span>
-                <span class="ai-text">전통 한옥이 즐비한 골목을 걸으며 다양한 각도로 촬영. 포토 스팟 3곳 자동 태그 완료.</span>
+            </div>
+
+            <div class="album-card" style="aspect-ratio:1;border-radius:13px;overflow:hidden;position:relative;box-shadow:0 3px 12px rgba(13,31,60,0.12);">
+              <div style="width:100%;height:100%;background:linear-gradient(155deg,#50C890 0%,#1A7A48 100%);display:flex;align-items:center;justify-content:center;font-size:2.6rem;">🌴</div>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,transparent 52%);"></div>
+              <div style="position:absolute;bottom:7px;left:8px;right:8px;">
+                <div style="font-size:0.68rem;font-weight:800;color:white;line-height:1.25;">🇹🇭 태국</div>
+                <div style="font-size:0.52rem;color:rgba(255,255,255,0.68);">28장 · 2024.01</div>
               </div>
+            </div>
+
+            <div class="album-card" style="aspect-ratio:1;border-radius:13px;overflow:hidden;position:relative;box-shadow:0 3px 12px rgba(13,31,60,0.12);">
+              <div style="width:100%;height:100%;background:linear-gradient(155deg,#E8A040 0%,#A04800 100%);display:flex;align-items:center;justify-content:center;font-size:2.6rem;">🕌</div>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,transparent 52%);"></div>
+              <div style="position:absolute;bottom:7px;left:8px;right:8px;">
+                <div style="font-size:0.68rem;font-weight:800;color:white;line-height:1.25;">🇲🇦 모로코</div>
+                <div style="font-size:0.52rem;color:rgba(255,255,255,0.68);">19장 · 2023.12</div>
+              </div>
+            </div>
+
+            <div class="album-card" style="aspect-ratio:1;border-radius:13px;border:1.5px dashed rgba(34,96,232,0.28);background:rgba(34,96,232,0.05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;">
+              <div style="width:30px;height:30px;border-radius:50%;background:rgba(34,96,232,0.12);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#2260E8;line-height:1;">+</div>
+              <div style="font-size:0.6rem;font-weight:700;color:#2260E8;text-align:center;line-height:1.35;">새 여행<br>추가</div>
+            </div>
+
+          </div>
+
+          <!-- Bottom tab bar -->
+          <div style="background:white;border-top:1px solid rgba(13,31,60,0.07);padding:8px 6px 4px;display:flex;justify-content:space-around;align-items:flex-start;">
+            <!-- 홈 탭 (active) -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#2260E8"><path d="M3 12L12 4l9 8v8a1 1 0 01-1 1H15v-5h-6v5H4a1 1 0 01-1-1z"/></svg>
+              <span style="font-size:0.5rem;color:#2260E8;font-weight:700;">홈</span>
+            </div>
+            <!-- 지도 탭 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(13,31,60,0.3)" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+              <span style="font-size:0.5rem;color:rgba(13,31,60,0.35);font-weight:600;">지도</span>
+            </div>
+            <!-- 기록 탭 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(13,31,60,0.3)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <span style="font-size:0.5rem;color:rgba(13,31,60,0.35);font-weight:600;">기록</span>
+            </div>
+            <!-- 설정 탭 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(13,31,60,0.3)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              <span style="font-size:0.5rem;color:rgba(13,31,60,0.35);font-weight:600;">MY</span>
             </div>
           </div>
 
-          <div class="tl-item" style="margin-bottom:0">
-            <div class="tl-left">
-              <div class="tl-dot" style="background:#34C97A;box-shadow:0 0 8px #34C97A"></div>
-            </div>
-            <div class="tl-card">
-              <div class="tl-card-top">
-                <div>
-                  <div class="tl-place">📍 명동 쇼핑거리</div>
-                  <div class="tl-time">02:30 PM — 04:50 PM</div>
-                </div>
-                <div class="tl-photos">
-                  <div class="photo-thumb" style="background:linear-gradient(135deg,#1a4a2a,#2a7a3a)">🛍</div>
-                  <div class="photo-thumb" style="background:linear-gradient(135deg,#0f3a1a,#1a5a2a)">🍜</div>
-                  <div class="photo-count">+5</div>
-                </div>
-              </div>
-              <div class="tl-ai-note">
-                <span class="ai-tag">AI</span>
-                <span class="ai-text">명동 거리에서 쇼핑과 길거리 음식 탐방. 이동 경로 자동 기록 및 사진 5장 분류 완료.</span>
-              </div>
-            </div>
+          <!-- Home indicator -->
+          <div style="background:white;padding:4px 0 8px;display:flex;justify-content:center;">
+            <div style="width:88px;height:4px;background:rgba(13,31,60,0.15);border-radius:2px;"></div>
           </div>
 
         </div>
@@ -760,12 +878,516 @@
     </div>
   </section>
 
-  <!-- METRICS -->
+  <!-- ══ FEATURE 2: 사진 자동 분류 ══ -->
+  <section style="padding:110px 6vw;position:relative;z-index:2;background:#EDF4FD;border-bottom:1px solid rgba(13,31,60,0.08);" id="feature-2">
+    <!-- 텍스트 + 지도 카드: 2열 레이아웃 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:100%;">
+
+      <!-- 왼쪽: 텍스트 -->
+      <div class="reveal">
+        <div class="feature-num">02</div>
+        <div class="section-label">Auto Classification</div>
+        <h2 class="section-title" style="margin-bottom:16px;">GPS 경로 기반<br>사진 자동 분류</h2>
+        <p style="font-size:1rem;color:rgba(13,31,60,0.55);line-height:1.85;margin-bottom:28px;max-width:440px;">갤러리를 연동하면 AI가 촬영 시간과 GPS 경로를 비교해 경복궁·북촌·명동 등 방문한 장소마다 사진을 자동으로 묶어줍니다. 수백 장도 순식간에 정리됩니다.</p>
+        <div class="feature-tag">📍 경로 기반 자동 분류</div>
+      </div>
+
+      <!-- 오른쪽: 지도 카드 (프레임 포함) -->
+      <div class="reveal">
+        <!-- 앱 카드 프레임 -->
+        <div style="background:#fff;border-radius:22px;box-shadow:0 12px 48px rgba(13,31,60,0.1),0 0 0 1px rgba(13,31,60,0.07);overflow:hidden;">
+
+          <!-- 카드 헤더 -->
+          <div style="padding:14px 18px 12px;border-bottom:1px solid rgba(13,31,60,0.06);display:flex;align-items:center;justify-content:space-between;background:#FAFCFF;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:8px;height:8px;border-radius:50%;background:#2260E8;"></div>
+              <div>
+                <div style="font-size:0.82rem;font-weight:800;color:#0D1F3C;line-height:1.2;">서울 여행 Day 1</div>
+                <div style="font-size:0.62rem;color:rgba(13,31,60,0.4);margin-top:2px;">2025.10.16 · 경복궁 → 북촌 → 명동</div>
+              </div>
+            </div>
+            <div style="background:#2260E8;color:white;font-size:0.62rem;font-weight:800;padding:4px 10px;border-radius:100px;letter-spacing:0.04em;">AI 분류 완료</div>
+          </div>
+
+          <!-- 지도 SVG -->
+          <svg viewBox="0 0 380 230" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <rect x="0" y="0" width="380" height="230" fill="#EDF4FD"/>
+            <!-- 도로망 -->
+            <path d="M110 0 L108 230" stroke="#D0E4FA" stroke-width="5"/>
+            <path d="M0 105 L380 103" stroke="#D0E4FA" stroke-width="5"/>
+            <path d="M0 78 L285 74" stroke="#D0E4FA" stroke-width="3.5"/>
+            <path d="M0 135 L375 129" stroke="#D0E4FA" stroke-width="4"/>
+            <path d="M0 160 L345 153" stroke="#D0E4FA" stroke-width="2.5"/>
+            <path d="M162 0 L163 115" stroke="#D0E4FA" stroke-width="2.5"/>
+            <path d="M202 45 L218 155" stroke="#D0E4FA" stroke-width="2.5"/>
+            <path d="M140 45 Q155 60 162 74" stroke="#D0E4FA" stroke-width="2"/>
+            <path d="M155 148 L228 143" stroke="#D0E4FA" stroke-width="2.5"/>
+            <!-- 한강 -->
+            <path d="M0 208 Q100 198 200 201 Q290 204 380 196" stroke="#B8D8F8" stroke-width="13" fill="none" opacity="0.75"/>
+            <path d="M0 208 Q100 198 200 201 Q290 204 380 196" stroke="#CDEAFF" stroke-width="7" fill="none" opacity="0.55"/>
+            <!-- 경복궁 블록 -->
+            <rect x="68" y="66" width="44" height="34" rx="4" fill="#C8DCFA" opacity="0.6"/>
+            <!-- 창덕궁 -->
+            <rect x="194" y="66" width="34" height="28" rx="4" fill="#C8DCFA" opacity="0.45"/>
+            <!-- 남산 -->
+            <ellipse cx="198" cy="188" rx="40" ry="24" fill="#C4D8B8" opacity="0.45"/>
+
+            <!-- GPS 경로 -->
+            <path d="M102 88 L162 74 L210 90 L214 130 L176 150 L182 188"
+              stroke="#2260E8" stroke-width="11" fill="none" opacity="0.08" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M102 88 L162 74 L210 90 L214 130 L176 150 L182 188"
+              stroke="#2260E8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- 경복궁 사진 스택 -->
+            <rect x="22" y="32" width="50" height="42" rx="6" fill="#6090C8" transform="rotate(-8 47 53)"/>
+            <rect x="24" y="34" width="50" height="42" rx="6" fill="#90B8E0" transform="rotate(-3 49 55)"/>
+            <rect x="26" y="36" width="50" height="42" rx="6" fill="white" stroke="#D8EAF8" stroke-width="1"/>
+            <rect x="26" y="36" width="50" height="22" rx="6" fill="#A8D4F0"/>
+            <rect x="26" y="56" width="50" height="22" fill="#8EC876"/>
+            <rect x="30" y="44" width="42" height="18" rx="3" fill="#C47828"/>
+            <!-- 장수 배지 -->
+            <rect x="60" y="26" width="24" height="13" rx="6.5" fill="#2260E8"/>
+            <text x="72" y="35" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif" font-weight="700">8장</text>
+            <!-- 핀 -->
+            <circle cx="102" cy="88" r="9" fill="#2260E8"/>
+            <circle cx="102" cy="88" r="4.5" fill="white"/>
+            <!-- 라벨 -->
+            <rect x="74" y="100" width="56" height="15" rx="7.5" fill="white" stroke="#C8DEFF" stroke-width="1"/>
+            <text x="102" y="110.5" text-anchor="middle" font-size="7" fill="#2260E8" font-family="sans-serif" font-weight="700">경복궁</text>
+
+            <!-- 북촌 사진 스택 -->
+            <rect x="188" y="14" width="48" height="40" rx="6" fill="#C07018" transform="rotate(-7 212 34)"/>
+            <rect x="190" y="16" width="48" height="40" rx="6" fill="#DC9828" transform="rotate(-3 214 36)"/>
+            <rect x="192" y="18" width="48" height="40" rx="6" fill="white" stroke="#F0DEB8" stroke-width="1"/>
+            <rect x="192" y="18" width="48" height="20" rx="6" fill="#A8D0F0"/>
+            <rect x="192" y="36" width="48" height="22" fill="#E0A060"/>
+            <path d="M192 36 L205 28 L216 26 L228 28 L240 36" fill="#904018"/>
+            <rect x="224" y="8" width="24" height="13" rx="6.5" fill="#F5A623"/>
+            <text x="236" y="17" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif" font-weight="700">11장</text>
+            <circle cx="162" cy="74" r="9" fill="#F5A623"/>
+            <circle cx="162" cy="74" r="4.5" fill="white"/>
+            <rect x="136" y="86" width="52" height="15" rx="7.5" fill="white" stroke="#FFD8A0" stroke-width="1"/>
+            <text x="162" y="96.5" text-anchor="middle" font-size="7" fill="#C07800" font-family="sans-serif" font-weight="700">북촌</text>
+
+            <!-- 명동 사진 스택 -->
+            <rect x="252" y="118" width="48" height="40" rx="6" fill="#34A060" transform="rotate(8 276 138)"/>
+            <rect x="254" y="120" width="48" height="40" rx="6" fill="#60C090" transform="rotate(3 278 140)"/>
+            <rect x="256" y="122" width="48" height="40" rx="6" fill="#D0EEE0" stroke="#A8D8C0" stroke-width="1"/>
+            <rect x="260" y="128" width="40" height="14" rx="3" fill="#A0CCBC" opacity="0.7"/>
+            <rect x="262" y="146" width="36" height="8" rx="2" fill="#B8D8CC" opacity="0.5"/>
+            <rect x="288" y="110" width="24" height="13" rx="6.5" fill="#34C97A"/>
+            <text x="300" y="119" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif" font-weight="700">5장</text>
+            <circle cx="176" cy="150" r="9" fill="#34C97A"/>
+            <circle cx="176" cy="150" r="4.5" fill="white"/>
+            <rect x="150" y="162" width="52" height="15" rx="7.5" fill="white" stroke="#A8E8C8" stroke-width="1"/>
+            <text x="176" y="172.5" text-anchor="middle" font-size="7" fill="#1A8040" font-family="sans-serif" font-weight="700">명동</text>
+
+            <!-- 경유지 -->
+            <circle cx="210" cy="90" r="4.5" fill="#2260E8" opacity="0.38"/>
+            <circle cx="214" cy="130" r="4.5" fill="#2260E8" opacity="0.38"/>
+            <circle cx="182" cy="188" r="4.5" fill="#2260E8" opacity="0.38"/>
+          </svg>
+
+          <!-- 카드 하단 바 -->
+          <div style="padding:10px 16px;background:#F7FAFE;border-top:1px solid rgba(13,31,60,0.05);display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="ai-pulse"></div>
+              <span style="font-size:0.72rem;color:rgba(13,31,60,0.55);">3개 장소 · 24장 분류 완료</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;background:rgba(34,96,232,0.07);padding:5px 12px;border-radius:100px;">
+              <span style="font-size:0.9rem;">🖼️</span>
+              <span style="font-size:0.68rem;font-weight:700;color:#2260E8;">갤러리 연동됨</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FEATURE 3: 여행 코스 추천 ══ -->
+  <section class="feature-section" id="feature-3">
+    <div class="feature-text reveal">
+      <div class="feature-num">03</div>
+      <div class="section-label">Personalized Route</div>
+      <h2>맞춤형 여행<br>코스 추천</h2>
+      <p>사용자의 여행 패턴과 취향을 분석해 최적의 동선을 추천합니다. 완성된 코스는 SNS와 캘린더로 바로 공유할 수 있습니다.</p>
+      <div class="feature-tag">🗺️ 개인화 추천</div>
+    </div>
+    <div class="feature-visual reveal">
+      <!-- 해외여행 추천 코스 헤더 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div>
+          <div style="font-size:0.65rem;color:rgba(13,31,60,0.4);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:3px;">AI 추천 코스</div>
+          <div style="font-size:0.92rem;font-weight:900;color:#0D1F3C;letter-spacing:-0.02em;">🇯🇵 도쿄 3박 4일</div>
+        </div>
+        <div style="background:rgba(34,96,232,0.08);border:1px solid rgba(34,96,232,0.15);border-radius:100px;padding:4px 12px;font-size:0.65rem;font-weight:700;color:#2260E8;">내 취향 98% 일치</div>
+      </div>
+      <div class="vis-route">
+        <div class="vis-route-item active">
+          <div class="vis-route-num" style="background:rgba(34,96,232,0.2);color:#2260E8;font-size:0.85rem;">1</div>
+          <div class="vis-route-info">
+            <h4>아사쿠사 · 센소지</h4>
+            <p>전통 · 역사 | 추천 체류 2h</p>
+          </div>
+          <div class="vis-route-time">09:00</div>
+        </div>
+        <div class="vis-route-item">
+          <div class="vis-route-num" style="background:rgba(245,166,35,0.18);color:#D4880A;font-size:0.85rem;">2</div>
+          <div class="vis-route-info">
+            <h4>시부야 스카이</h4>
+            <p>전망 · 포토스팟 | 추천 체류 1.5h</p>
+          </div>
+          <div class="vis-route-time">12:00</div>
+        </div>
+        <div class="vis-route-item">
+          <div class="vis-route-num" style="background:rgba(52,201,122,0.18);color:#1A8040;font-size:0.85rem;">3</div>
+          <div class="vis-route-info">
+            <h4>신주쿠 골든가이</h4>
+            <p>미식 · 야경 | 추천 체류 2h</p>
+          </div>
+          <div class="vis-route-time">18:30</div>
+        </div>
+        <div class="vis-route-item">
+          <div class="vis-route-num" style="background:rgba(234,60,100,0.12);color:#CC2850;font-size:0.85rem;">4</div>
+          <div class="vis-route-info">
+            <h4>하라주쿠 · 오모테산도</h4>
+            <p>쇼핑 · 카페 | 추천 체류 2h</p>
+          </div>
+          <div class="vis-route-time">14:00</div>
+        </div>
+      </div>
+      <!-- 다른 추천 국가 칩 -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+        <div style="background:rgba(34,96,232,0.06);border:1px solid rgba(34,96,232,0.14);border-radius:100px;padding:4px 12px;font-size:0.65rem;font-weight:700;color:#2260E8;">🇫🇷 파리</div>
+        <div style="background:rgba(34,96,232,0.06);border:1px solid rgba(34,96,232,0.14);border-radius:100px;padding:4px 12px;font-size:0.65rem;font-weight:700;color:#2260E8;">🇹🇭 방콕</div>
+        <div style="background:rgba(34,96,232,0.06);border:1px solid rgba(34,96,232,0.14);border-radius:100px;padding:4px 12px;font-size:0.65rem;font-weight:700;color:#2260E8;">🇮🇹 로마</div>
+        <div style="background:rgba(13,31,60,0.04);border:1px solid rgba(13,31,60,0.08);border-radius:100px;padding:4px 12px;font-size:0.65rem;color:rgba(13,31,60,0.4);">+12개국</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURE 4: 포토 스팟 ══ -->
+  <section class="feature-section" id="feature-4">
+    <div class="feature-text reveal">
+      <div class="feature-num">04</div>
+      <div class="section-label">Photo Guide</div>
+      <h2>포토 스팟 &amp;<br>촬영 가이드</h2>
+      <p>지역별 인기 포토 스팟과 추천 구도, 최적 촬영 시간을 알려드립니다. 여행지에서의 경험이 더욱 풍부해집니다.</p>
+      <div class="feature-tag">📸 포토 가이드</div>
+      <!-- 촬영 팁 카드 하나만 -->
+      <div style="margin-top:20px;background:#fff;border-radius:14px;border:1px solid rgba(34,96,232,0.1);overflow:hidden;box-shadow:0 2px 12px rgba(34,96,232,0.06);">
+        <div style="background:linear-gradient(120deg,#2260E8 0%,#4A82FF 100%);padding:14px 16px;display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">📸</div>
+          <div>
+            <div style="font-size:0.8rem;font-weight:800;color:white;line-height:1.2;">북촌 골목 포토 가이드</div>
+            <div style="font-size:0.6rem;color:rgba(255,255,255,0.7);margin-top:2px;">AI 분석 · 오전 8–9시 황금시간대</div>
+          </div>
+          <div style="margin-left:auto;background:rgba(255,255,255,0.2);border-radius:100px;padding:3px 10px;font-size:0.6rem;color:white;font-weight:700;flex-shrink:0;">🔥 인기</div>
+        </div>
+        <div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="vis-tip-chip">골목 끝 정면 구도</span>
+          <span class="vis-tip-chip">광각 렌즈 추천</span>
+          <span class="vis-tip-chip">그림자 활용</span>
+          <span class="vis-tip-chip">역광 노출 +1</span>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual reveal" style="background:linear-gradient(150deg,#EDF4FD 0%,#F7FAFE 100%);">
+      <!-- 포토스팟 지도 시각화 -->
+      <svg viewBox="0 0 340 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <!-- 배경 -->
+        <rect x="0" y="0" width="340" height="320" rx="16" fill="#EDF4FD"/>
+        <!-- 도로 -->
+        <path d="M100 0 L98 320" stroke="#D0E4FA" stroke-width="5"/>
+        <path d="M0 130 L340 128" stroke="#D0E4FA" stroke-width="5"/>
+        <path d="M0 88 L260 84" stroke="#D0E4FA" stroke-width="3.5"/>
+        <path d="M0 172 L340 166" stroke="#D0E4FA" stroke-width="4"/>
+        <path d="M0 210 L310 202" stroke="#D0E4FA" stroke-width="2.5"/>
+        <path d="M150 0 L151 125" stroke="#D0E4FA" stroke-width="2.5"/>
+        <path d="M188 40 L202 180" stroke="#D0E4FA" stroke-width="2.5"/>
+        <path d="M125 40 Q140 58 150 72" stroke="#D0E4FA" stroke-width="2"/>
+        <!-- 한강 -->
+        <path d="M0 290 Q90 280 175 283 Q260 286 340 278" stroke="#B8D8F8" stroke-width="14" fill="none" opacity="0.75"/>
+        <path d="M0 290 Q90 280 175 283 Q260 286 340 278" stroke="#CDEAFF" stroke-width="7" fill="none" opacity="0.5"/>
+        <!-- 경복궁 블록 -->
+        <rect x="58" y="76" width="42" height="34" rx="4" fill="#C8DCFA" opacity="0.6"/>
+        <!-- 남산 -->
+        <ellipse cx="182" cy="246" rx="44" ry="28" fill="#C4D8B8" opacity="0.42"/>
+
+        <!-- SPOT 1: 북촌 골목 (카메라 아이콘 + 황금색) -->
+        <circle cx="148" cy="80" r="22" fill="#FFF3D0" stroke="#F5A623" stroke-width="2"/>
+        <text x="148" y="88" text-anchor="middle" font-size="18">📸</text>
+        <!-- 황금시간 뱃지 -->
+        <rect x="116" y="56" width="64" height="16" rx="8" fill="#F5A623"/>
+        <text x="148" y="67" text-anchor="middle" font-size="7.5" fill="white" font-family="sans-serif" font-weight="700">오전 8-9시 최적</text>
+        <!-- 라벨 -->
+        <rect x="114" y="105" width="68" height="15" rx="7.5" fill="white" stroke="#FFD8A0" stroke-width="1"/>
+        <text x="148" y="115.5" text-anchor="middle" font-size="7" fill="#C07800" font-family="sans-serif" font-weight="700">북촌 골목</text>
+
+        <!-- SPOT 2: 경복궁 정문 -->
+        <circle cx="88" cy="130" r="20" fill="#EEF5FF" stroke="#2260E8" stroke-width="2"/>
+        <text x="88" y="138" text-anchor="middle" font-size="16">🏯</text>
+        <rect x="56" y="153" width="64" height="15" rx="7.5" fill="white" stroke="#C8DEFF" stroke-width="1"/>
+        <text x="88" y="163.5" text-anchor="middle" font-size="7" fill="#2260E8" font-family="sans-serif" font-weight="700">경복궁 정문</text>
+
+        <!-- SPOT 3: 남산타워 뷰 -->
+        <circle cx="220" cy="200" r="20" fill="#E8FFF4" stroke="#34C97A" stroke-width="2"/>
+        <text x="220" y="208" text-anchor="middle" font-size="16">🗼</text>
+        <rect x="188" y="223" width="64" height="15" rx="7.5" fill="white" stroke="#A8E8C8" stroke-width="1"/>
+        <text x="220" y="233.5" text-anchor="middle" font-size="7" fill="#1A8040" font-family="sans-serif" font-weight="700">남산 전망대</text>
+
+        <!-- 현재 위치 -->
+        <circle cx="148" cy="160" r="9" fill="#2260E8"/>
+        <circle cx="148" cy="160" r="4.5" fill="white"/>
+        <circle cx="148" cy="160" r="16" fill="#2260E8" opacity="0.1"/>
+        <circle cx="148" cy="160" r="22" fill="#2260E8" opacity="0.06"/>
+        <!-- 현재위치→스팟 점선 -->
+        <line x1="148" y1="151" x2="148" y2="102" stroke="#F5A623" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+        <line x1="140" y1="154" x2="105" y2="148" stroke="#2260E8" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.5"/>
+        <line x1="156" y1="156" x2="202" y2="195" stroke="#34C97A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.5"/>
+
+        <!-- 거리 표시 -->
+        <rect x="108" y="122" width="32" height="12" rx="6" fill="#F5A623" opacity="0.9"/>
+        <text x="124" y="130" text-anchor="middle" font-size="6.5" fill="white" font-family="sans-serif" font-weight="700">0.4km</text>
+        <rect x="78" y="138" width="32" height="12" rx="6" fill="#2260E8" opacity="0.85"/>
+        <text x="94" y="146" text-anchor="middle" font-size="6.5" fill="white" font-family="sans-serif" font-weight="700">1.2km</text>
+        <rect x="176" y="168" width="32" height="12" rx="6" fill="#34C97A" opacity="0.85"/>
+        <text x="192" y="176" text-anchor="middle" font-size="6.5" fill="white" font-family="sans-serif" font-weight="700">2.1km</text>
+
+        <!-- AI 배지 -->
+        <rect x="8" y="8" width="110" height="20" rx="10" fill="#2260E8"/>
+        <text x="63" y="21" text-anchor="middle" font-size="8" fill="white" font-family="sans-serif" font-weight="700">📍 주변 스팟 3곳 발견</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ══ HOW IT WORKS — ILLUSTRATED ══ -->
+  <section id="how">
+    <div class="how-header reveal" style="text-align:center;margin-bottom:72px">
+      <div class="section-label" style="text-align:center">How It Works</div>
+      <h2 class="section-title" style="margin:0 auto">3단계로 완성되는 나만의 여행 기록</h2>
+      <p class="section-desc" style="margin:12px auto 0;text-align:center">경로 기록 — 갤러리 연동 — 일지 완성. 그게 전부입니다.</p>
+    </div>
+
+    <div class="how-steps-grid">
+
+      <!-- STEP 1: GPS가 경로를 자동 기록 -->
+      <div class="how-step reveal">
+        <div class="how-step-ill">
+          <svg viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- map background -->
+            <rect x="20" y="16" width="220" height="168" rx="16" fill="#EDF4FD"/>
+            <!-- grid lines -->
+            <line x1="20" y1="52" x2="240" y2="52" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="20" y1="88" x2="240" y2="88" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="20" y1="124" x2="240" y2="124" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="20" y1="160" x2="240" y2="160" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="60" y1="16" x2="60" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="100" y1="16" x2="100" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="140" y1="16" x2="140" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="180" y1="16" x2="180" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="220" y1="16" x2="220" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <!-- street blocks (subtle) -->
+            <rect x="68" y="30" width="24" height="16" rx="3" fill="#D4E8FF" opacity="0.7"/>
+            <rect x="108" y="58" width="24" height="16" rx="3" fill="#D4E8FF" opacity="0.7"/>
+            <rect x="148" y="96" width="24" height="16" rx="3" fill="#D4E8FF" opacity="0.7"/>
+            <rect x="72" y="130" width="20" height="12" rx="3" fill="#D4E8FF" opacity="0.5"/>
+            <rect x="190" y="50" width="20" height="14" rx="3" fill="#D4E8FF" opacity="0.5"/>
+            <!-- GPS route path — animated dashed line being drawn -->
+            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
+              stroke="#2260E8" stroke-width="2.5" fill="none"
+              stroke-dasharray="5 3" stroke-linecap="round"/>
+            <!-- route glow -->
+            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
+              stroke="#2260E8" stroke-width="6" fill="none" opacity="0.12" stroke-linecap="round"/>
+            <!-- waypoint dots on path -->
+            <circle cx="52"  cy="158" r="5" fill="#2260E8"/>
+            <circle cx="52"  cy="158" r="3" fill="white"/>
+            <circle cx="88"  cy="118" r="5" fill="#2260E8"/>
+            <circle cx="88"  cy="118" r="3" fill="white"/>
+            <circle cx="120" cy="88"  r="5" fill="#2260E8"/>
+            <circle cx="120" cy="88"  r="3" fill="white"/>
+            <circle cx="148" cy="60"  r="5" fill="#2260E8"/>
+            <circle cx="148" cy="60"  r="3" fill="white"/>
+            <circle cx="192" cy="44"  r="5" fill="#2260E8"/>
+            <circle cx="192" cy="44"  r="3" fill="white"/>
+            <!-- current location pulsing -->
+            <circle cx="192" cy="44" r="11" fill="#2260E8" opacity="0.15"/>
+            <circle cx="192" cy="44" r="17" fill="#2260E8" opacity="0.07"/>
+            <!-- person icon at current location -->
+            <circle cx="192" cy="44" r="5" fill="#2260E8"/>
+            <!-- GPS satellite icon top-right -->
+            <circle cx="226" cy="30" r="11" fill="white" stroke="#D0E0F5" stroke-width="1"/>
+            <text x="226" y="34" text-anchor="middle" font-size="11" font-family="sans-serif">📡</text>
+            <!-- signal arcs from satellite to person -->
+            <path d="M218 36 Q210 38 202 42" stroke="#2260E8" stroke-width="1" fill="none" stroke-dasharray="2 2" opacity="0.4"/>
+            <!-- time indicator -->
+            <rect x="28" y="22" width="52" height="16" rx="8" fill="white" stroke="#D0E0F5" stroke-width="1"/>
+            <text x="54" y="33" text-anchor="middle" font-size="8" fill="#2260E8" font-family="sans-serif" font-weight="700">실시간 기록 중</text>
+          </svg>
+        </div>
+        <div class="how-step-num">01</div>
+        <h3 class="how-step-title">GPS가 경로를 자동 기록</h3>
+        <p class="how-step-desc">여행하는 동안 GPS가 이동 경로를 실시간으로 자동 추적합니다. 앱을 켜두기만 하면 방문한 장소와 동선이 지도 위에 그려집니다.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="how-arrow reveal">
+        <svg viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 12 Q20 12 40 12" stroke="#2260E8" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <path d="M36 7 L44 12 L36 17" stroke="#2260E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+        </svg>
+      </div>
+
+      <!-- STEP 2: 갤러리 연동 → 사진이 경로 위에 분류 -->
+      <div class="how-step reveal">
+        <div class="how-step-ill">
+          <svg viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- map background -->
+            <rect x="20" y="16" width="220" height="168" rx="16" fill="#EDF4FD"/>
+            <!-- grid lines -->
+            <line x1="20" y1="52" x2="240" y2="52" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="20" y1="88" x2="240" y2="88" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="20" y1="124" x2="240" y2="124" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="60" y1="16" x2="60" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="100" y1="16" x2="100" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="140" y1="16" x2="140" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <line x1="180" y1="16" x2="180" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
+            <!-- route path -->
+            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
+              stroke="#2260E8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
+              stroke="#2260E8" stroke-width="6" fill="none" opacity="0.1" stroke-linecap="round"/>
+            <!-- PLACE A: 경복궁 — photo cluster on route -->
+            <circle cx="52" cy="158" r="6" fill="#2260E8"/>
+            <circle cx="52" cy="158" r="3" fill="white"/>
+            <!-- photo strip at place A -->
+            <rect x="28" y="126" width="22" height="18" rx="3" fill="white" stroke="#2260E8" stroke-width="1.2"/>
+            <rect x="30" y="128" width="18" height="12" rx="2" fill="#B8D8F8"/>
+            <rect x="34" y="126" width="22" height="18" rx="3" fill="white" stroke="#2260E8" stroke-width="1.2"/>
+            <rect x="36" y="128" width="18" height="12" rx="2" fill="#A8C8E8"/>
+            <rect x="40" y="126" width="22" height="18" rx="3" fill="white" stroke="#2260E8" stroke-width="1.2" opacity="0.9"/>
+            <rect x="42" y="128" width="18" height="12" rx="2" fill="#98B8D8"/>
+            <!-- +4 badge -->
+            <rect x="46" y="138" width="16" height="10" rx="5" fill="#2260E8"/>
+            <text x="54" y="145" text-anchor="middle" font-size="6.5" fill="white" font-family="sans-serif" font-weight="700">+4</text>
+            <!-- label -->
+            <rect x="26" y="148" width="32" height="10" rx="5" fill="#2260E8" opacity="0.12"/>
+            <text x="42" y="155" text-anchor="middle" font-size="6.5" fill="#2260E8" font-family="sans-serif" font-weight="700">경복궁</text>
+            <!-- PLACE B: 북촌 -->
+            <circle cx="120" cy="88" r="6" fill="#F5A623"/>
+            <circle cx="120" cy="88" r="3" fill="white"/>
+            <!-- photo strip at place B -->
+            <rect x="124" y="60" width="20" height="16" rx="3" fill="white" stroke="#F5A623" stroke-width="1.2"/>
+            <rect x="126" y="62" width="16" height="10" rx="2" fill="#FFE0A8"/>
+            <rect x="128" y="60" width="20" height="16" rx="3" fill="white" stroke="#F5A623" stroke-width="1.2" opacity="0.85"/>
+            <rect x="130" y="62" width="16" height="10" rx="2" fill="#FFCC80"/>
+            <!-- +3 badge -->
+            <rect x="132" y="68" width="14" height="9" rx="4.5" fill="#F5A623"/>
+            <text x="139" y="75" text-anchor="middle" font-size="6" fill="white" font-family="sans-serif" font-weight="700">+3</text>
+            <rect x="122" y="79" width="30" height="10" rx="5" fill="#F5A623" opacity="0.12"/>
+            <text x="137" y="86" text-anchor="middle" font-size="6.5" fill="#C07800" font-family="sans-serif" font-weight="700">북촌 한옥마을</text>
+            <!-- PLACE C: 명동 -->
+            <circle cx="192" cy="44" r="6" fill="#34C97A"/>
+            <circle cx="192" cy="44" r="3" fill="white"/>
+            <!-- photo strip at place C -->
+            <rect x="196" y="26" width="18" height="14" rx="3" fill="white" stroke="#34C97A" stroke-width="1.2"/>
+            <rect x="198" y="28" width="14" height="9" rx="2" fill="#A8EEC8"/>
+            <rect x="200" y="26" width="18" height="14" rx="3" fill="white" stroke="#34C97A" stroke-width="1.2" opacity="0.85"/>
+            <rect x="202" y="28" width="14" height="9" rx="2" fill="#88DDB0"/>
+            <!-- +5 badge -->
+            <rect x="204" y="32" width="14" height="9" rx="4.5" fill="#34C97A"/>
+            <text x="211" y="39" text-anchor="middle" font-size="6" fill="white" font-family="sans-serif" font-weight="700">+5</text>
+            <rect x="196" y="42" width="26" height="10" rx="5" fill="#34C97A" opacity="0.12"/>
+            <text x="209" y="49" text-anchor="middle" font-size="6.5" fill="#1A8A50" font-family="sans-serif" font-weight="700">명동</text>
+            <!-- gallery sync icon bottom right -->
+            <rect x="192" y="154" width="44" height="22" rx="8" fill="white" stroke="#D0E0F5" stroke-width="1"/>
+            <text x="206" y="167" font-size="8" font-family="sans-serif">🖼️</text>
+            <text x="214" y="167" font-size="7.5" fill="#2260E8" font-family="sans-serif" font-weight="700"> 연동</text>
+          </svg>
+        </div>
+        <div class="how-step-num">02</div>
+        <h3 class="how-step-title">갤러리 연동으로 사진 자동 분류</h3>
+        <p class="how-step-desc">갤러리를 연동하면 AI가 사진의 촬영 시간과 GPS를 비교해 경복궁·북촌·명동 등 방문한 장소별로 사진을 자동으로 분류합니다.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="how-arrow reveal">
+        <svg viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 12 Q20 12 40 12" stroke="#2260E8" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <path d="M36 7 L44 12 L36 17" stroke="#2260E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+        </svg>
+      </div>
+
+      <!-- STEP 3: AI 일지 자동 완성 & 공유 -->
+      <div class="how-step reveal">
+        <div class="how-step-ill">
+          <svg viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- journal/card background -->
+            <rect x="24" y="14" width="212" height="172" rx="16" fill="white" stroke="#D0E0F5" stroke-width="1.2"/>
+            <!-- top bar -->
+            <rect x="24" y="14" width="212" height="36" rx="16" fill="#2260E8"/>
+            <rect x="24" y="34" width="212" height="16" fill="#2260E8"/>
+            <text x="64" y="36" font-size="9" fill="white" font-family="sans-serif" font-weight="700">서울 여행 Day 1</text>
+            <text x="64" y="46" font-size="7" fill="rgba(255,255,255,0.7)" font-family="sans-serif">2025.10.16 · 3개 장소 · 12장</text>
+            <!-- calendar icon -->
+            <rect x="34" y="20" width="22" height="22" rx="5" fill="rgba(255,255,255,0.2)"/>
+            <text x="45" y="35" text-anchor="middle" font-size="12" font-family="sans-serif">🗓</text>
+            <!-- AI badge -->
+            <rect x="198" y="22" width="28" height="14" rx="7" fill="rgba(255,255,255,0.25)"/>
+            <text x="212" y="32" text-anchor="middle" font-size="7.5" fill="white" font-family="sans-serif" font-weight="800">AI ✓</text>
+
+            <!-- mini map strip -->
+            <rect x="32" y="56" width="100" height="56" rx="8" fill="#EDF4FD"/>
+            <path d="M42 98 Q52 82 62 76 Q72 70 80 62 Q90 56 102 54 Q112 52 122 52" stroke="#2260E8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="42"  cy="98" r="4" fill="#2260E8"/>
+            <circle cx="80"  cy="62" r="4" fill="#F5A623"/>
+            <circle cx="122" cy="52" r="4" fill="#34C97A"/>
+
+            <!-- place timeline -->
+            <!-- Place 1 -->
+            <circle cx="46" cy="126" r="5" fill="#2260E8"/>
+            <rect x="54" y="120" width="164" height="14" rx="4" fill="#F4F9FF"/>
+            <text x="60" y="130" font-size="7.5" fill="#0D1F3C" font-family="sans-serif" font-weight="700">📍 경복궁</text>
+            <text x="172" y="130" font-size="7" fill="#8AAAC8" font-family="sans-serif">09:30</text>
+            <!-- photo thumbs for place 1 -->
+            <rect x="54" y="136" width="16" height="12" rx="2.5" fill="#B8D8F8"/>
+            <rect x="72" y="136" width="16" height="12" rx="2.5" fill="#A8C8E8"/>
+            <rect x="90" y="136" width="16" height="12" rx="2.5" fill="#98B8D8"/>
+            <rect x="108" y="136" width="22" height="12" rx="2.5" fill="#EEF5FF" stroke="#D0E0F5" stroke-width="0.8"/>
+            <text x="119" y="144" text-anchor="middle" font-size="7" fill="#5A80B8" font-family="sans-serif">+4</text>
+
+            <!-- Place 2 -->
+            <circle cx="46" cy="160" r="5" fill="#F5A623"/>
+            <rect x="54" y="154" width="164" height="14" rx="4" fill="#FFF8EE"/>
+            <text x="60" y="164" font-size="7.5" fill="#0D1F3C" font-family="sans-serif" font-weight="700">📍 북촌 한옥마을</text>
+            <text x="172" y="164" font-size="7" fill="#8AAAC8" font-family="sans-serif">11:40</text>
+
+            <!-- AI text lines (simulated) -->
+            <rect x="54" y="170" width="96" height="5" rx="2.5" fill="#EEF5FF"/>
+            <rect x="54" y="177" width="72" height="5" rx="2.5" fill="#EEF5FF"/>
+
+            <!-- share button -->
+            <rect x="140" y="170" width="48" height="16" rx="8" fill="#2260E8"/>
+            <text x="164" y="180" text-anchor="middle" font-size="7.5" fill="white" font-family="sans-serif" font-weight="700">공유하기 →</text>
+          </svg>
+        </div>
+        <div class="how-step-num">03</div>
+        <h3 class="how-step-title">AI가 여행 일지 자동 완성</h3>
+        <p class="how-step-desc">경로와 사진을 바탕으로 AI가 여행 일지를 자동 작성합니다. 지도, 타임라인, 사진이 하나로 완성되고 SNS에 바로 공유할 수 있습니다.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ METRICS ══ -->
   <section id="metrics">
     <div class="metrics-inner">
       <div>
         <div class="section-label reveal">목표 지표</div>
-        <h2 class="section-title reveal" style="white-space:nowrap;font-size:clamp(1.6rem,3vw,2.8rem)">측정 가능한 목표로 성장합니다</h2>
+        <h2 class="section-title reveal">측정 가능한 목표로<br>성장합니다</h2>
         <p class="section-desc reveal">사용자 경험과 기능 완성도를 수치로 검증하며, 단계별로 서비스를 확장해 나갑니다.</p>
       </div>
       <div class="metrics-grid">
@@ -793,19 +1415,34 @@
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- ══ CTA ══ -->
   <section id="cta">
-    <svg class="cta-plane-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 52 L72 36 Q88 34 90 42 Q92 50 78 54 L10 52Z" fill="white" opacity="0.9"/>
-      <path d="M78 54 Q94 52 96 48 Q98 44 90 42 Q88 34 72 36 L78 54Z" fill="#DDEEFF" opacity="0.85"/>
-      <path d="M30 52 L20 74 L48 60 L44 52Z" fill="white" opacity="0.8"/>
-      <path d="M14 52 L8 64 L22 56 L20 52Z" fill="white" opacity="0.7"/>
-    </svg>
     <div class="cta-inner reveal">
-      <div class="cta-label">출시 예정</div>
-      <h2 class="cta-title">여행의 모든 순간을,<br>TRIPON과 함께</h2>
-      <p class="cta-desc">번거로운 사진 정리와 기록 작업은 AI에게 맡기세요.<br>당신은 여행을 즐기기만 하면 됩니다.</p>
-      <button class="btn-cta" onclick="window.open('https://forms.gle/FcSPwBpX26vCAH3B6','_blank')">앱 출시 알림 신청하기 →</button>
+      <div class="cta-label">✈️ 출시 예정</div>
+      <h2 class="cta-title">여행은 당신이,<br>기록은 <span class="hl">TRIPON</span>이</h2>
+      <p class="cta-desc">사진 한 장이면 충분합니다. AI가 경로·사진·일지를<br>자동으로 완성해 평생 기억할 여행 기록을 만들어드립니다.</p>
+
+      <!-- 지표 -->
+      <div class="cta-stats">
+        <div class="cta-stat">
+          <div class="cta-stat-num">5,000+</div>
+          <div class="cta-stat-label">출시 3개월<br>목표 다운로드</div>
+        </div>
+        <div class="cta-stat">
+          <div class="cta-stat-num">70%</div>
+          <div class="cta-stat-label">기록 시간<br>단축 목표</div>
+        </div>
+        <div class="cta-stat">
+          <div class="cta-stat-num">80%</div>
+          <div class="cta-stat-label">경로 자동 생성<br>성공률 목표</div>
+        </div>
+      </div>
+
+      <!-- 버튼 -->
+      <div class="cta-buttons">
+        <button class="btn-cta" onclick="window.open('https://forms.gle/FcSPwBpX26vCAH3B6','_blank')">출시 알림 신청하기 →</button>
+        <button class="btn-cta-ghost" onclick="document.getElementById('feature-1').scrollIntoView({behavior:'smooth'})">기능 둘러보기</button>
+      </div>
     </div>
   </section>
 
@@ -816,26 +1453,234 @@
   </footer>
 
   <script>
-    // Stars
-    const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 130; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      const size = Math.random() * 2.5 + 0.5;
-      s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${(Math.random()*3+2).toFixed(1)}s;--delay:${(Math.random()*4).toFixed(1)}s;`;
-      starsEl.appendChild(s);
-    }
+    /* ── Clouds ── */
+    (function() {
+      const container = document.getElementById('clouds');
 
-    // Scroll reveal
+      // Cloud configs: [topPct, scaleFactor, speedSec, delaySec, opacity]
+      const configs = [
+        { top:  8, scale: 1.4, spd: 80, delay:  0,  op: 0.78 },
+        { top: 15, scale: 0.9, spd: 65, delay: 12,  op: 0.65 },
+        { top: 22, scale: 1.1, spd: 95, delay: 28,  op: 0.72 },
+        { top:  5, scale: 0.7, spd: 55, delay: 40,  op: 0.55 },
+        { top: 30, scale: 1.3, spd:110, delay:  8,  op: 0.60 },
+        { top: 12, scale: 0.8, spd: 72, delay: 55,  op: 0.68 },
+        { top: 38, scale: 1.0, spd: 88, delay: 20,  op: 0.50 },
+        { top: 18, scale: 1.6, spd:120, delay: 35,  op: 0.62 },
+      ];
+
+      configs.forEach(cfg => {
+        const wrap = document.createElement('div');
+        wrap.className = 'cloud-wrap';
+        const startX = -320 * cfg.scale;
+        const endX   = window.innerWidth + 320 * cfg.scale;
+        wrap.style.cssText = `top:${cfg.top}%;opacity:${cfg.op};--from:${startX}px;--to:${endX}px;--spd:${cfg.spd}s;--delay:-${cfg.delay}s;`;
+
+        // Build cloud from overlapping circles using inline SVG
+        const s = cfg.scale;
+        const w = Math.round(220 * s);
+        const h = Math.round(90  * s);
+        const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+        svg.setAttribute('width',  w);
+        svg.setAttribute('height', h + Math.round(20 * s));
+        svg.setAttribute('viewBox', `0 0 ${w} ${h + Math.round(20*s)}`);
+        svg.setAttribute('fill','none');
+
+        // Cloud shape: a smooth puffy outline via circles composited in SVG
+        const cx  = Math.round(w/2);
+        const by  = h + Math.round(10*s); // base y of bottom
+        const r1  = Math.round(42*s); // main body
+        const r2  = Math.round(30*s); // left puff
+        const r3  = Math.round(36*s); // right puff
+        const r4  = Math.round(22*s); // top-left small
+        const r5  = Math.round(26*s); // top-right small
+
+        const circles = [
+          { cx: cx,            cy: by - r1,       r: r1  },
+          { cx: cx - r1 + 8*s, cy: by - r2,       r: r2  },
+          { cx: cx + r1 - 8*s, cy: by - r3 + 4*s, r: r3  },
+          { cx: cx - r1 + r4,  cy: by - r1 - r4 + 14*s, r: r4 },
+          { cx: cx + r1 - r5,  cy: by - r1 - r5 + 18*s, r: r5 },
+          // flat bottom rectangle to fill gaps
+        ];
+
+        // Draw flat base rect first
+        const baseRect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+        baseRect.setAttribute('x',  Math.round(cx - r1 - r2 + 12*s));
+        baseRect.setAttribute('y',  Math.round(by - 18*s));
+        baseRect.setAttribute('width',  Math.round((r1 + r2 + r3 - 12*s)*2 - 4*s));
+        baseRect.setAttribute('height', Math.round(18*s));
+        baseRect.setAttribute('fill', 'rgba(255,255,255,0.9)');
+        svg.appendChild(baseRect);
+
+        circles.forEach(c => {
+          const el = document.createElementNS('http://www.w3.org/2000/svg','circle');
+          el.setAttribute('cx', c.cx);
+          el.setAttribute('cy', c.cy);
+          el.setAttribute('r',  c.r);
+          el.setAttribute('fill','rgba(255,255,255,0.9)');
+          svg.appendChild(el);
+        });
+
+        wrap.appendChild(svg);
+        container.appendChild(wrap);
+      });
+    })();
+
+    /* ── Scroll reveal ── */
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // Stagger cards
-    document.querySelectorAll('.feature-card, .metric-card').forEach((el, i) => {
+    /* ── Stagger cards ── */
+    document.querySelectorAll('.metric-card').forEach((el, i) => {
       el.style.transitionDelay = `${(i % 4) * 0.08}s`;
     });
+
+    /* ────────────────────────────────────────────
+       PARABOLA PLANE ANIMATION via JS canvas
+       The plane follows a true parabolic arc:
+       x = t * stageW
+       y = 4*peak * t*(1-t)   (vertex at t=0.5)
+       Plane angle = tangent of curve at each t
+    ──────────────────────────────────────────── */
+    (function() {
+      const stage    = document.getElementById('planeStage');
+      const plane    = document.getElementById('bigPlane');
+      const trailSvg = document.getElementById('trailCanvas');
+
+      const DURATION = 4000;  // ms per loop  (fast)
+      const PAUSE    = 800;   // ms pause between loops
+
+      // Parabola parameters (in stage-coordinate space 0..1)
+      // Lower value = higher peak (0 = very top, 1 = bottom baseline)
+      const PEAK_Y_FACTOR = 0.55; // slightly lower arc
+
+      let trailPoints = [];
+      let trailPath   = null;
+      let animId      = null;
+      let startTime   = null;
+      let paused      = false;
+      let pauseUntil  = 0;
+
+      // Create trail path element
+      trailPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      trailPath.setAttribute('fill', 'none');
+      trailPath.setAttribute('stroke', 'rgba(34,96,232,0.3)');
+      trailPath.setAttribute('stroke-width', '2');
+      trailPath.setAttribute('stroke-linecap', 'round');
+      trailSvg.appendChild(trailPath);
+
+      const trailPath2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      trailPath2.setAttribute('fill', 'none');
+      trailPath2.setAttribute('stroke', 'rgba(34,96,232,0.15)');
+      trailPath2.setAttribute('stroke-width', '1.2');
+      trailPath2.setAttribute('stroke-linecap', 'round');
+      trailSvg.appendChild(trailPath2);
+
+      function getParabola(t, W, H) {
+        // x: from -planeW/2 (off-left) to W + planeW/2 (off-right)
+        const pw = plane.offsetWidth;
+        const x  = -pw + t * (W + pw * 2);
+        // y: parabola vertex at t=0.5, peaking at PEAK_Y_FACTOR * H from bottom
+        // baseline at H (bottom of stage)
+        const baseline = H;
+        const peak     = H * (1 - PEAK_Y_FACTOR); // y-coordinate of peak
+        const y        = baseline + (peak - baseline) * 4 * t * (1 - t);
+        return { x, y };
+      }
+
+      function getAngle(t, W, H) {
+        // derivative of the parabola for rotation
+        const dt  = 0.001;
+        const p1  = getParabola(Math.max(0, t - dt), W, H);
+        const p2  = getParabola(Math.min(1, t + dt), W, H);
+        return Math.atan2(p2.y - p1.y, p2.x - p1.x) * (180 / Math.PI);
+      }
+
+      function tick(ts) {
+        const now = performance.now();
+
+        if (paused) {
+          if (now < pauseUntil) { animId = requestAnimationFrame(tick); return; }
+          paused    = false;
+          startTime = now;
+          trailPoints = [];
+        }
+
+        if (!startTime) startTime = now;
+        const elapsed = now - startTime;
+        const t       = Math.min(elapsed / DURATION, 1);
+
+        const W = stage.offsetWidth  || 1000;
+        const H = stage.offsetHeight || 340;
+
+        const { x, y } = getParabola(t, W, H);
+        const angle     = getAngle(t, W, H);
+
+        const pw = plane.offsetWidth;
+        const ph = plane.offsetHeight;
+
+        // Position plane (center of element at x, y)
+        plane.style.left      = (x - pw / 2) + 'px';
+        plane.style.top       = (y - ph / 2) + 'px';
+        plane.style.transform = `rotate(${angle}deg)`;
+
+        // Fade in/out at edges
+        const fadeZone = 0.07;
+        let opacity = 1;
+        if (t < fadeZone)       opacity = t / fadeZone;
+        else if (t > 1-fadeZone) opacity = (1 - t) / fadeZone;
+        plane.style.opacity = opacity;
+
+        // Trail — collect mid-body point
+        // mid-body ≈ 60% from nose (right side of SVG)
+        const trailX = x + pw * 0.1;
+        const trailY = y;
+        trailPoints.push([trailX, trailY]);
+
+        // Keep only recent trail points (fade-off length)
+        const maxPts = 80;
+        if (trailPoints.length > maxPts) trailPoints.shift();
+
+        // Build SVG path
+        if (trailPoints.length > 1) {
+          // Scale: trailCanvas viewBox is "0 0 1000 340", but stage size may differ
+          const scaleX = 1000 / W;
+          const scaleY = 340  / H;
+
+          let d  = `M ${trailPoints[0][0]*scaleX} ${trailPoints[0][1]*scaleY}`;
+          let d2 = `M ${(trailPoints[0][0]-4)*scaleX} ${(trailPoints[0][1]+4)*scaleY}`;
+          for (let i = 1; i < trailPoints.length; i++) {
+            const alpha = i / trailPoints.length;
+            d  += ` L ${trailPoints[i][0]*scaleX} ${trailPoints[i][1]*scaleY}`;
+            d2 += ` L ${(trailPoints[i][0]-4)*scaleX} ${(trailPoints[i][1]+4)*scaleY}`;
+          }
+          trailPath.setAttribute('d',  d);
+          trailPath2.setAttribute('d', d2);
+
+          // Fade trail opacity with progress
+          const trailOpacity = opacity * 0.7;
+          trailPath.setAttribute('stroke', `rgba(34,96,232,${(trailOpacity*0.4).toFixed(2)})`);
+          trailPath2.setAttribute('stroke', `rgba(34,96,232,${(trailOpacity*0.2).toFixed(2)})`);
+        }
+
+        if (t >= 1) {
+          // Pause then restart
+          plane.style.opacity = '0';
+          trailPath.setAttribute('d',  '');
+          trailPath2.setAttribute('d', '');
+          trailPoints = [];
+          paused     = true;
+          pauseUntil = now + PAUSE;
+        }
+
+        animId = requestAnimationFrame(tick);
+      }
+
+      animId = requestAnimationFrame(tick);
+    })();
   </script>
 </body>
 </html>
