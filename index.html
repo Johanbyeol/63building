@@ -82,6 +82,22 @@
     }
     .hero-orb { display: none; }
 
+    /* ── HERO CLOUD LAYER ── */
+    .hero-cloud-layer {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+    }
+    .hc {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.72);
+      filter: blur(0px);
+      animation: hcDrift linear infinite;
+    }
+    @keyframes hcDrift {
+      from { transform: translateX(var(--hc-from)); }
+      to   { transform: translateX(var(--hc-to)); }
+    }
+
     /* ── HERO CONTENT ── */
     .hero-content { position: relative; z-index: 10; width: 100%; }
 
@@ -152,12 +168,13 @@
 
     /* ── HERO TITLE ── */
     .hero-title {
-      font-size: clamp(5rem, 13vw, 11rem);
+      font-size: clamp(4.5rem, 10vw, 9rem);
       font-weight: 900; letter-spacing: -0.05em; line-height: 1;
       color: #0D1F3C;
       text-shadow: 0 2px 40px rgba(34,96,232,0.12);
       position: relative; z-index: 9;
       display: inline-block;
+      margin-top: 48px;
     }
 
     /* Each letter */
@@ -181,7 +198,7 @@
       font-size: clamp(1rem, 2.2vw, 1.5rem);
       font-weight: 400; font-style: normal;
       color: rgba(13,31,60,0.55);
-      letter-spacing: 0.01em; margin-bottom: 32px; margin-top: 10px;
+      letter-spacing: 0.01em; margin-bottom: 32px; margin-top: 18px;
       animation: fadeUp 0.8s 0.12s ease both;
     }
     .hero-desc {
@@ -448,7 +465,7 @@
       display: grid;
       grid-template-columns: 1fr 48px 1fr 48px 1fr;
       gap: 0;
-      align-items: center;
+      align-items: stretch;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -470,9 +487,9 @@
 
     .how-step-ill {
       width: 100%;
-      aspect-ratio: 1.3;
+      aspect-ratio: 1;
       margin: 0 auto 20px;
-      max-width: 200px;
+      max-width: 100%;
     }
     .how-step-ill svg { width: 100%; height: 100%; }
 
@@ -483,8 +500,8 @@
       display: inline-block; margin-bottom: 10px;
     }
     .how-step-title {
-      font-size: 1.05rem; font-weight: 900; color: #0D1F3C;
-      margin-bottom: 10px; letter-spacing: -0.02em;
+      font-size: 1.25rem; font-weight: 900; color: #0D1F3C;
+      margin-bottom: 10px; letter-spacing: -0.03em;
     }
     .how-step-desc {
       font-size: 0.875rem; color: rgba(13,31,60,0.55); line-height: 1.75;
@@ -508,18 +525,28 @@
     /* ── METRICS ── */
     #metrics { padding: 110px 6vw; background: #F7FAFE; position: relative; z-index: 2; }
     .metrics-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-    .metrics-grid  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .metrics-grid  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .metric-card {
       background: #fff; border: 1px solid rgba(34,96,232,0.1);
-      border-radius: 18px; padding: 28px 22px;
+      border-radius: 20px; padding: 28px 24px;
       transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
     }
-    .metric-card:hover { transform: translateY(-3px); border-color: rgba(34,96,232,0.22); box-shadow: 0 8px 32px rgba(34,96,232,0.09); }
-    .metric-num {
-      font-size: 2.4rem; font-weight: 900; letter-spacing: -0.04em;
-      color: var(--blue-bright); margin-bottom: 6px;
+    .metric-card:hover { transform: translateY(-4px); border-color: rgba(34,96,232,0.22); box-shadow: 0 10px 36px rgba(34,96,232,0.1); }
+    .metric-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 16px;
     }
-    .metric-label { font-size: 0.8rem; color: rgba(13,31,60,0.55); line-height: 1.55; font-weight: 500; }
+    .metric-subtitle {
+      font-size: 0.9rem; font-weight: 800; letter-spacing: 0.02em;
+      text-transform: none; color: #0D1F3C;
+      margin-bottom: 8px;
+    }
+    .metric-num {
+      font-size: 2.6rem; font-weight: 900; letter-spacing: -0.04em;
+      color: var(--blue-bright); line-height: 1; margin-bottom: 8px;
+    }
+    .metric-label { font-size: 0.8rem; color: rgba(13,31,60,0.5); line-height: 1.6; font-weight: 500; }
     .metric-tag {
       display: inline-block; margin-top: 10px;
       background: rgba(34,96,232,0.08); color: var(--blue-bright);
@@ -566,8 +593,8 @@
       border-right: 1px solid rgba(34,96,232,0.08);
     }
     .cta-stat:last-child { border-right: none; }
-    .cta-stat-num { font-size: 1.7rem; font-weight: 900; color: #2260E8; letter-spacing: -0.04em; line-height: 1; }
-    .cta-stat-label { font-size: 0.68rem; color: rgba(13,31,60,0.45); margin-top: 5px; line-height: 1.4; }
+    .cta-stat-num { font-size: 2.2rem; font-weight: 900; color: #2260E8; letter-spacing: -0.04em; line-height: 1; margin-top: 10px; }
+    .cta-stat-label { font-size: 0.82rem; font-weight: 600; color: rgba(13,31,60,0.65); line-height: 1.5; }
     .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .btn-cta {
       display: inline-block;
@@ -684,6 +711,9 @@
     <div class="hero-orb orb3"></div>
     <div class="hero-horizon"></div>
 
+    <!-- 히어로 배경 구름들 (큰, 느리게 흐르는) -->
+    <div class="hero-cloud-layer" id="heroClouds"></div>
+
     <div class="hero-content">
 
       <!-- Plane stage: positioned so the parabola arc passes just above "TRIPON" -->
@@ -714,14 +744,50 @@
         </svg>
       </div>
 
-      <h1 class="hero-title">
-        <span class="tl">T</span><span class="tl">R</span><span class="tl">I</span><span class="tl">P</span><span class="tl">O</span><span class="tl">N</span>
-      </h1>
-      <p class="hero-title-sub">여행은 당신이, 기록은 우리가 자동으로</p>
-      <p class="hero-desc">사진 한 장 올리는 것만으로, AI가 여행 경로와 일지를 자동으로 완성합니다. 복잡한 정리는 이제 그만.</p>
+      <!-- TRIPON -->
+      <div style="position:relative;display:inline-block;margin:0 auto;">
+        <h1 class="hero-title">
+          <span class="tl">T</span><span class="tl">R</span><span class="tl">I</span><span class="tl">P</span><span class="tl">O</span><span class="tl">N</span>
+        </h1>
+      </div>
+            <p class="hero-title-sub">여행은 당신이, 기록은 우리가 자동으로</p>
+      <p class="hero-desc">GPS로 당신의 여행 경로와 일지를 자동으로 완성합니다. 복잡한 정리는 이제 그만!</p>
       <div class="hero-btns">
         <button class="btn-primary" onclick="document.getElementById('feature-1').scrollIntoView({behavior:'smooth'})">기능 알아보기</button>
         <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">사용 방법 보기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PAIN POINT ══ -->
+  <section style="padding:100px 6vw;background:#F7FAFE;border-bottom:1px solid rgba(13,31,60,0.08);position:relative;z-index:2;" id="pain">
+    <div style="max-width:900px;margin:0 auto;text-align:center;">
+      <div class="section-label reveal" style="margin-bottom:16px;">혹시 이런 경험 있으신가요?</div>
+      <h2 class="section-title reveal" style="margin-bottom:48px;">여행은 끝났는데,<br>기록은 시작도 못 했나요?</h2>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:780px;margin:0 auto 48px;" class="reveal">
+
+        <!-- Pain 1 -->
+        <div style="background:#fff;border-radius:20px;padding:36px 32px;border:1px solid rgba(13,31,60,0.08);box-shadow:0 4px 20px rgba(13,31,60,0.05);text-align:left;">
+          <div style="font-size:3rem;margin-bottom:18px;line-height:1;">📱💻📷</div>
+          <h3 style="font-size:1.3rem;font-weight:900;color:#0D1F3C;margin-bottom:12px;letter-spacing:-0.03em;">흩어진 여행 기록</h3>
+          <p style="font-size:1rem;color:rgba(13,31,60,0.6);line-height:1.8;">소중했던 해외 여행 기록, 인스타그램·블로그·사진앱에 뿔뿔이 흩어져 있어 체계적으로 모아볼 수 없었던 경험, 있으시죠?</p>
+        </div>
+
+        <!-- Pain 2 -->
+        <div style="background:#fff;border-radius:20px;padding:36px 32px;border:1px solid rgba(13,31,60,0.08);box-shadow:0 4px 20px rgba(13,31,60,0.05);text-align:left;">
+          <div style="font-size:3rem;margin-bottom:18px;line-height:1;">😮‍💨</div>
+          <h3 style="font-size:1.3rem;font-weight:900;color:#0D1F3C;margin-bottom:12px;letter-spacing:-0.03em;">너무 오래 걸리는 정리</h3>
+          <p style="font-size:1rem;color:rgba(13,31,60,0.6);line-height:1.8;">여행 사진을 날짜별·장소별로 정리하고 일지를 쓰는 데만 1시간 이상. 결국 귀찮아서 그냥 포기한 적 있지 않으신가요?</p>
+        </div>
+
+      </div>
+
+      <!-- 해결 메시지 -->
+      <div class="reveal" style="background:linear-gradient(135deg,rgba(34,96,232,0.07) 0%,rgba(34,96,232,0.03) 100%);border:1px solid rgba(34,96,232,0.14);border-radius:16px;padding:24px 32px;display:inline-block;">
+        <p style="font-size:1.05rem;font-weight:700;color:#2260E8;margin:0;line-height:1.6;">
+          TRIPON이 이 두 가지 문제를 한번에 해결합니다 ✈️
+        </p>
       </div>
     </div>
   </section>
@@ -732,8 +798,7 @@
       <div class="feature-num">01</div>
       <div class="section-label">Travel Archive</div>
       <h2>나라별 여행 기록 보관</h2>
-      <p>방문한 나라마다 여행 기록이 자동으로 분류되어 보관됩니다. 언제든 꺼내보는 나만의 여행 앨범, 글 한 줄 쓸 필요가 없습니다.</p>
-      <div class="feature-tag">🗂️ 나라별 자동 보관</div>
+      <p>방문한 나라마다 여행 기록을 보관할 수 있습니다. 언제든 꺼내보는 나만의 여행 앨범을 만들어 보세요!</p>
     </div>
     <div class="feature-visual reveal" style="display:flex;align-items:center;justify-content:center;background:transparent;border:none;box-shadow:none;padding:0;">
       <!-- Phone outer shell — 9:19.5 ratio -->
@@ -883,17 +948,16 @@
     <!-- 텍스트 + 지도 카드: 2열 레이아웃 -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:100%;">
 
-      <!-- 왼쪽: 텍스트 -->
-      <div class="reveal">
+      <!-- 오른쪽: 텍스트 (order:2) -->
+      <div class="feature-text reveal" style="order:2;">
         <div class="feature-num">02</div>
         <div class="section-label">Auto Classification</div>
-        <h2 class="section-title" style="margin-bottom:16px;">GPS 경로 기반<br>사진 자동 분류</h2>
-        <p style="font-size:1rem;color:rgba(13,31,60,0.55);line-height:1.85;margin-bottom:28px;max-width:440px;">갤러리를 연동하면 AI가 촬영 시간과 GPS 경로를 비교해 경복궁·북촌·명동 등 방문한 장소마다 사진을 자동으로 묶어줍니다. 수백 장도 순식간에 정리됩니다.</p>
-        <div class="feature-tag">📍 경로 기반 자동 분류</div>
+        <h2>GPS 경로 기반<br>사진 자동 분류</h2>
+        <p>갤러리를 연동하면 AI가 촬영 시간과 GPS 경로를 비교해 방문한 장소마다 사진을 자동으로 묶어줍니다. 수백 장도 순식간에 정리됩니다.</p>
       </div>
 
-      <!-- 오른쪽: 지도 카드 (프레임 포함) -->
-      <div class="reveal">
+      <!-- 왼쪽: 지도 카드 (order:1) -->
+      <div class="reveal" style="order:1;">
         <!-- 앱 카드 프레임 -->
         <div style="background:#fff;border-radius:22px;box-shadow:0 12px 48px rgba(13,31,60,0.1),0 0 0 1px rgba(13,31,60,0.07);overflow:hidden;">
 
@@ -1013,7 +1077,6 @@
       <div class="section-label">Personalized Route</div>
       <h2>맞춤형 여행<br>코스 추천</h2>
       <p>사용자의 여행 패턴과 취향을 분석해 최적의 동선을 추천합니다. 완성된 코스는 SNS와 캘린더로 바로 공유할 수 있습니다.</p>
-      <div class="feature-tag">🗺️ 개인화 추천</div>
     </div>
     <div class="feature-visual reveal">
       <!-- 해외여행 추천 코스 헤더 -->
@@ -1069,33 +1132,33 @@
   </section>
 
   <!-- ══ FEATURE 4: 포토 스팟 ══ -->
-  <section class="feature-section" id="feature-4">
+  <section class="feature-section reverse" id="feature-4">
     <div class="feature-text reveal">
       <div class="feature-num">04</div>
       <div class="section-label">Photo Guide</div>
       <h2>포토 스팟 &amp;<br>촬영 가이드</h2>
       <p>지역별 인기 포토 스팟과 추천 구도, 최적 촬영 시간을 알려드립니다. 여행지에서의 경험이 더욱 풍부해집니다.</p>
-      <div class="feature-tag">📸 포토 가이드</div>
-      <!-- 촬영 팁 카드 하나만 -->
-      <div style="margin-top:20px;background:#fff;border-radius:14px;border:1px solid rgba(34,96,232,0.1);overflow:hidden;box-shadow:0 2px 12px rgba(34,96,232,0.06);">
-        <div style="background:linear-gradient(120deg,#2260E8 0%,#4A82FF 100%);padding:14px 16px;display:flex;align-items:center;gap:10px;">
-          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">📸</div>
+    </div>
+    <div class="feature-visual reveal" style="background:linear-gradient(150deg,#EDF4FD 0%,#F7FAFE 100%);position:relative;overflow:visible;">
+      <!-- 포토 가이드 카드 — 지도 위에 overlay -->
+      <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);z-index:10;background:#fff;border-radius:14px;border:1px solid rgba(34,96,232,0.1);overflow:hidden;box-shadow:0 4px 20px rgba(34,96,232,0.12);">
+        <div style="background:linear-gradient(120deg,#2260E8 0%,#4A82FF 100%);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">📸</div>
           <div>
-            <div style="font-size:0.8rem;font-weight:800;color:white;line-height:1.2;">북촌 골목 포토 가이드</div>
-            <div style="font-size:0.6rem;color:rgba(255,255,255,0.7);margin-top:2px;">AI 분석 · 오전 8–9시 황금시간대</div>
+            <div style="font-size:0.78rem;font-weight:800;color:white;line-height:1.2;">북촌 골목 포토 가이드</div>
+            <div style="font-size:0.58rem;color:rgba(255,255,255,0.7);margin-top:1px;">AI 분석 · 오전 8–9시 황금시간대</div>
           </div>
-          <div style="margin-left:auto;background:rgba(255,255,255,0.2);border-radius:100px;padding:3px 10px;font-size:0.6rem;color:white;font-weight:700;flex-shrink:0;">🔥 인기</div>
+          <div style="margin-left:auto;background:rgba(255,255,255,0.2);border-radius:100px;padding:3px 9px;font-size:0.58rem;color:white;font-weight:700;flex-shrink:0;">🔥 인기</div>
         </div>
-        <div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px;">
+        <div style="padding:10px 14px;display:flex;flex-wrap:wrap;gap:5px;">
           <span class="vis-tip-chip">골목 끝 정면 구도</span>
           <span class="vis-tip-chip">광각 렌즈 추천</span>
           <span class="vis-tip-chip">그림자 활용</span>
           <span class="vis-tip-chip">역광 노출 +1</span>
         </div>
       </div>
-    </div>
-    <div class="feature-visual reveal" style="background:linear-gradient(150deg,#EDF4FD 0%,#F7FAFE 100%);">
       <!-- 포토스팟 지도 시각화 -->
+      <div style="margin-top:52px;"></div>
       <svg viewBox="0 0 340 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
         <!-- 배경 -->
         <rect x="0" y="0" width="340" height="320" rx="16" fill="#EDF4FD"/>
@@ -1168,7 +1231,7 @@
     <div class="how-header reveal" style="text-align:center;margin-bottom:72px">
       <div class="section-label" style="text-align:center">How It Works</div>
       <h2 class="section-title" style="margin:0 auto">3단계로 완성되는 나만의 여행 기록</h2>
-      <p class="section-desc" style="margin:12px auto 0;text-align:center">경로 기록 — 갤러리 연동 — 일지 완성. 그게 전부입니다.</p>
+      <p class="section-desc" style="margin:12px auto 0;text-align:center">경로 기록 — 갤러리 연동 — 일지 완성, 단 3단계</p>
     </div>
 
     <div class="how-steps-grid">
@@ -1176,56 +1239,42 @@
       <!-- STEP 1: GPS가 경로를 자동 기록 -->
       <div class="how-step reveal">
         <div class="how-step-ill">
-          <svg viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- map background -->
-            <rect x="20" y="16" width="220" height="168" rx="16" fill="#EDF4FD"/>
-            <!-- grid lines -->
-            <line x1="20" y1="52" x2="240" y2="52" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="20" y1="88" x2="240" y2="88" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="20" y1="124" x2="240" y2="124" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="20" y1="160" x2="240" y2="160" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="60" y1="16" x2="60" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="100" y1="16" x2="100" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="140" y1="16" x2="140" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="180" y1="16" x2="180" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="220" y1="16" x2="220" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <!-- street blocks (subtle) -->
-            <rect x="68" y="30" width="24" height="16" rx="3" fill="#D4E8FF" opacity="0.7"/>
-            <rect x="108" y="58" width="24" height="16" rx="3" fill="#D4E8FF" opacity="0.7"/>
-            <rect x="148" y="96" width="24" height="16" rx="3" fill="#D4E8FF" opacity="0.7"/>
-            <rect x="72" y="130" width="20" height="12" rx="3" fill="#D4E8FF" opacity="0.5"/>
-            <rect x="190" y="50" width="20" height="14" rx="3" fill="#D4E8FF" opacity="0.5"/>
-            <!-- GPS route path — animated dashed line being drawn -->
-            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
-              stroke="#2260E8" stroke-width="2.5" fill="none"
-              stroke-dasharray="5 3" stroke-linecap="round"/>
-            <!-- route glow -->
-            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
-              stroke="#2260E8" stroke-width="6" fill="none" opacity="0.12" stroke-linecap="round"/>
-            <!-- waypoint dots on path -->
-            <circle cx="52"  cy="158" r="5" fill="#2260E8"/>
-            <circle cx="52"  cy="158" r="3" fill="white"/>
-            <circle cx="88"  cy="118" r="5" fill="#2260E8"/>
-            <circle cx="88"  cy="118" r="3" fill="white"/>
-            <circle cx="120" cy="88"  r="5" fill="#2260E8"/>
-            <circle cx="120" cy="88"  r="3" fill="white"/>
-            <circle cx="148" cy="60"  r="5" fill="#2260E8"/>
-            <circle cx="148" cy="60"  r="3" fill="white"/>
-            <circle cx="192" cy="44"  r="5" fill="#2260E8"/>
-            <circle cx="192" cy="44"  r="3" fill="white"/>
-            <!-- current location pulsing -->
-            <circle cx="192" cy="44" r="11" fill="#2260E8" opacity="0.15"/>
-            <circle cx="192" cy="44" r="17" fill="#2260E8" opacity="0.07"/>
-            <!-- person icon at current location -->
-            <circle cx="192" cy="44" r="5" fill="#2260E8"/>
-            <!-- GPS satellite icon top-right -->
-            <circle cx="226" cy="30" r="11" fill="white" stroke="#D0E0F5" stroke-width="1"/>
-            <text x="226" y="34" text-anchor="middle" font-size="11" font-family="sans-serif">📡</text>
-            <!-- signal arcs from satellite to person -->
-            <path d="M218 36 Q210 38 202 42" stroke="#2260E8" stroke-width="1" fill="none" stroke-dasharray="2 2" opacity="0.4"/>
-            <!-- time indicator -->
-            <rect x="28" y="22" width="52" height="16" rx="8" fill="white" stroke="#D0E0F5" stroke-width="1"/>
-            <text x="54" y="33" text-anchor="middle" font-size="8" fill="#2260E8" font-family="sans-serif" font-weight="700">실시간 기록 중</text>
+          <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 지도 배경 -->
+            <rect x="10" y="10" width="240" height="200" rx="18" fill="#EDF4FD"/>
+            <!-- 도로망 -->
+            <path d="M10 110 L250 108" stroke="#C8DEFF" stroke-width="4"/>
+            <path d="M10 70  L250 68"  stroke="#C8DEFF" stroke-width="3"/>
+            <path d="M10 150 L250 148" stroke="#C8DEFF" stroke-width="3"/>
+            <path d="M90  10 L88  210" stroke="#C8DEFF" stroke-width="4"/>
+            <path d="M160 10 L158 210" stroke="#C8DEFF" stroke-width="3"/>
+            <!-- 건물 블록 -->
+            <rect x="96" y="16"  width="56" height="46" rx="6" fill="#C8DCFA" opacity="0.5"/>
+            <rect x="96" y="116" width="56" height="28" rx="6" fill="#C8DCFA" opacity="0.4"/>
+            <rect x="22" y="78"  width="60" height="24" rx="6" fill="#C8DCFA" opacity="0.35"/>
+            <rect x="170" y="78" width="72" height="24" rx="6" fill="#C8DCFA" opacity="0.35"/>
+            <!-- GPS 경로 glow -->
+            <path d="M 42 180 Q 60 155 80 138 Q 100 120 110 104 Q 122 86 138 72 Q 155 58 175 48 Q 200 36 220 32"
+              stroke="#2260E8" stroke-width="10" fill="none" opacity="0.1" stroke-linecap="round"/>
+            <!-- GPS 경로 선 -->
+            <path d="M 42 180 Q 60 155 80 138 Q 100 120 110 104 Q 122 86 138 72 Q 155 58 175 48 Q 200 36 220 32"
+              stroke="#2260E8" stroke-width="2.5" fill="none" stroke-dasharray="7 4" stroke-linecap="round"/>
+            <!-- 경유지 핀들 -->
+            <circle cx="42"  cy="180" r="7" fill="#2260E8"/>
+            <circle cx="42"  cy="180" r="3.5" fill="white"/>
+            <circle cx="110" cy="104" r="7" fill="#2260E8"/>
+            <circle cx="110" cy="104" r="3.5" fill="white"/>
+            <circle cx="175" cy="48"  r="7" fill="#2260E8"/>
+            <circle cx="175" cy="48"  r="3.5" fill="white"/>
+            <!-- 현재 위치 펄스 (마지막 점) -->
+            <circle cx="220" cy="32" r="18" fill="#2260E8" opacity="0.1"/>
+            <circle cx="220" cy="32" r="11" fill="#2260E8" opacity="0.18"/>
+            <circle cx="220" cy="32" r="7"  fill="#2260E8"/>
+            <circle cx="220" cy="32" r="3.5" fill="white"/>
+            <!-- 실시간 배지 -->
+            <rect x="16" y="16" width="64" height="18" rx="9" fill="#2260E8"/>
+            <circle cx="26" cy="25" r="3.5" fill="white" opacity="0.9"/>
+            <text x="44" y="29" text-anchor="middle" font-size="8.5" fill="white" font-family="sans-serif" font-weight="700">실시간 기록</text>
           </svg>
         </div>
         <div class="how-step-num">01</div>
@@ -1244,68 +1293,49 @@
       <!-- STEP 2: 갤러리 연동 → 사진이 경로 위에 분류 -->
       <div class="how-step reveal">
         <div class="how-step-ill">
-          <svg viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- map background -->
-            <rect x="20" y="16" width="220" height="168" rx="16" fill="#EDF4FD"/>
-            <!-- grid lines -->
-            <line x1="20" y1="52" x2="240" y2="52" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="20" y1="88" x2="240" y2="88" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="20" y1="124" x2="240" y2="124" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="60" y1="16" x2="60" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="100" y1="16" x2="100" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="140" y1="16" x2="140" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <line x1="180" y1="16" x2="180" y2="184" stroke="#C8DEFF" stroke-width="0.8"/>
-            <!-- route path -->
-            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
-              stroke="#2260E8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M 52 158 Q 68 130 88 118 Q 110 106 120 88 Q 132 70 148 60 Q 168 48 192 44"
-              stroke="#2260E8" stroke-width="6" fill="none" opacity="0.1" stroke-linecap="round"/>
-            <!-- PLACE A: 경복궁 — photo cluster on route -->
-            <circle cx="52" cy="158" r="6" fill="#2260E8"/>
-            <circle cx="52" cy="158" r="3" fill="white"/>
-            <!-- photo strip at place A -->
-            <rect x="28" y="126" width="22" height="18" rx="3" fill="white" stroke="#2260E8" stroke-width="1.2"/>
-            <rect x="30" y="128" width="18" height="12" rx="2" fill="#B8D8F8"/>
-            <rect x="34" y="126" width="22" height="18" rx="3" fill="white" stroke="#2260E8" stroke-width="1.2"/>
-            <rect x="36" y="128" width="18" height="12" rx="2" fill="#A8C8E8"/>
-            <rect x="40" y="126" width="22" height="18" rx="3" fill="white" stroke="#2260E8" stroke-width="1.2" opacity="0.9"/>
-            <rect x="42" y="128" width="18" height="12" rx="2" fill="#98B8D8"/>
-            <!-- +4 badge -->
-            <rect x="46" y="138" width="16" height="10" rx="5" fill="#2260E8"/>
-            <text x="54" y="145" text-anchor="middle" font-size="6.5" fill="white" font-family="sans-serif" font-weight="700">+4</text>
-            <!-- label -->
-            <rect x="26" y="148" width="32" height="10" rx="5" fill="#2260E8" opacity="0.12"/>
-            <text x="42" y="155" text-anchor="middle" font-size="6.5" fill="#2260E8" font-family="sans-serif" font-weight="700">경복궁</text>
-            <!-- PLACE B: 북촌 -->
-            <circle cx="120" cy="88" r="6" fill="#F5A623"/>
-            <circle cx="120" cy="88" r="3" fill="white"/>
-            <!-- photo strip at place B -->
-            <rect x="124" y="60" width="20" height="16" rx="3" fill="white" stroke="#F5A623" stroke-width="1.2"/>
-            <rect x="126" y="62" width="16" height="10" rx="2" fill="#FFE0A8"/>
-            <rect x="128" y="60" width="20" height="16" rx="3" fill="white" stroke="#F5A623" stroke-width="1.2" opacity="0.85"/>
-            <rect x="130" y="62" width="16" height="10" rx="2" fill="#FFCC80"/>
-            <!-- +3 badge -->
-            <rect x="132" y="68" width="14" height="9" rx="4.5" fill="#F5A623"/>
-            <text x="139" y="75" text-anchor="middle" font-size="6" fill="white" font-family="sans-serif" font-weight="700">+3</text>
-            <rect x="122" y="79" width="30" height="10" rx="5" fill="#F5A623" opacity="0.12"/>
-            <text x="137" y="86" text-anchor="middle" font-size="6.5" fill="#C07800" font-family="sans-serif" font-weight="700">북촌 한옥마을</text>
-            <!-- PLACE C: 명동 -->
-            <circle cx="192" cy="44" r="6" fill="#34C97A"/>
-            <circle cx="192" cy="44" r="3" fill="white"/>
-            <!-- photo strip at place C -->
-            <rect x="196" y="26" width="18" height="14" rx="3" fill="white" stroke="#34C97A" stroke-width="1.2"/>
-            <rect x="198" y="28" width="14" height="9" rx="2" fill="#A8EEC8"/>
-            <rect x="200" y="26" width="18" height="14" rx="3" fill="white" stroke="#34C97A" stroke-width="1.2" opacity="0.85"/>
-            <rect x="202" y="28" width="14" height="9" rx="2" fill="#88DDB0"/>
-            <!-- +5 badge -->
-            <rect x="204" y="32" width="14" height="9" rx="4.5" fill="#34C97A"/>
-            <text x="211" y="39" text-anchor="middle" font-size="6" fill="white" font-family="sans-serif" font-weight="700">+5</text>
-            <rect x="196" y="42" width="26" height="10" rx="5" fill="#34C97A" opacity="0.12"/>
-            <text x="209" y="49" text-anchor="middle" font-size="6.5" fill="#1A8A50" font-family="sans-serif" font-weight="700">명동</text>
-            <!-- gallery sync icon bottom right -->
-            <rect x="192" y="154" width="44" height="22" rx="8" fill="white" stroke="#D0E0F5" stroke-width="1"/>
-            <text x="206" y="167" font-size="8" font-family="sans-serif">🖼️</text>
-            <text x="214" y="167" font-size="7.5" fill="#2260E8" font-family="sans-serif" font-weight="700"> 연동</text>
+          <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 지도 배경 -->
+            <rect x="10" y="10" width="240" height="200" rx="18" fill="#EDF4FD"/>
+            <!-- 도로 -->
+            <path d="M10 112 L250 110" stroke="#C8DEFF" stroke-width="4"/>
+            <path d="M10 72  L250 70"  stroke="#C8DEFF" stroke-width="3"/>
+            <path d="M10 152 L250 150" stroke="#C8DEFF" stroke-width="3"/>
+            <path d="M90  10 L88  210" stroke="#C8DEFF" stroke-width="4"/>
+            <path d="M160 10 L158 210" stroke="#C8DEFF" stroke-width="3"/>
+            <!-- 건물 블록 -->
+            <rect x="96" y="18"  width="56" height="46" rx="6" fill="#C8DCFA" opacity="0.5"/>
+            <rect x="22" y="80"  width="60" height="24" rx="6" fill="#C8DCFA" opacity="0.35"/>
+            <!-- GPS 경로 -->
+            <path d="M 38 182 Q 60 158 80 140 Q 102 122 112 106 Q 124 88 140 74 Q 158 60 178 50 Q 200 38 222 34"
+              stroke="#2260E8" stroke-width="10" fill="none" opacity="0.1" stroke-linecap="round"/>
+            <path d="M 38 182 Q 60 158 80 140 Q 102 122 112 106 Q 124 88 140 74 Q 158 60 178 50 Q 200 38 222 34"
+              stroke="#2260E8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- 경복궁 핀 + 사진 스택 -->
+            <rect x="14" y="140" width="36" height="30" rx="5" fill="#7AAAD0" transform="rotate(-7 32 155)"/>
+            <rect x="16" y="142" width="36" height="30" rx="5" fill="#A8C8EE" transform="rotate(-3 34 157)"/>
+            <rect x="18" y="144" width="36" height="30" rx="5" fill="#C8DCFF"/>
+            <text x="36" y="163" text-anchor="middle" font-size="14">🏯</text>
+            <rect x="40" y="134" width="20" height="12" rx="6" fill="#2260E8"/>
+            <text x="50" y="143" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif" font-weight="700">8장</text>
+            <circle cx="38" cy="182" r="8" fill="#2260E8"/>
+            <circle cx="38" cy="182" r="4" fill="white"/>
+            <rect x="18" y="192" width="44" height="14" rx="7" fill="white" stroke="#C8DEFF" stroke-width="1"/>
+            <text x="40" y="201.5" text-anchor="middle" font-size="7.5" fill="#2260E8" font-family="sans-serif" font-weight="700">경복궁</text>
+            <!-- 북촌 핀 + 사진 스택 -->
+            <rect x="130" y="44" width="36" height="30" rx="5" fill="#C07820" transform="rotate(-7 148 59)"/>
+            <rect x="132" y="46" width="36" height="30" rx="5" fill="#DC9830" transform="rotate(-3 150 61)"/>
+            <rect x="134" y="48" width="36" height="30" rx="5" fill="#FFD070"/>
+            <text x="152" y="67" text-anchor="middle" font-size="14">🏘</text>
+            <rect x="158" y="38" width="20" height="12" rx="6" fill="#F5A623"/>
+            <text x="168" y="47" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif" font-weight="700">11장</text>
+            <circle cx="112" cy="106" r="8" fill="#F5A623"/>
+            <circle cx="112" cy="106" r="4" fill="white"/>
+            <rect x="84" y="116" width="56" height="14" rx="7" fill="white" stroke="#FFD8A0" stroke-width="1"/>
+            <text x="112" y="125.5" text-anchor="middle" font-size="7.5" fill="#C07800" font-family="sans-serif" font-weight="700">북촌 한옥마을</text>
+            <!-- 갤러리 배지 -->
+            <rect x="152" y="188" width="96" height="18" rx="9" fill="white" stroke="#D0E0F5" stroke-width="1"/>
+            <text x="167" y="199" font-size="10">🖼️</text>
+            <text x="178" y="199" font-size="8" fill="#2260E8" font-family="sans-serif" font-weight="700"> 갤러리 연동됨</text>
           </svg>
         </div>
         <div class="how-step-num">02</div>
@@ -1323,55 +1353,53 @@
 
       <!-- STEP 3: AI 일지 자동 완성 & 공유 -->
       <div class="how-step reveal">
-        <div class="how-step-ill">
-          <svg viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- journal/card background -->
-            <rect x="24" y="14" width="212" height="172" rx="16" fill="white" stroke="#D0E0F5" stroke-width="1.2"/>
-            <!-- top bar -->
-            <rect x="24" y="14" width="212" height="36" rx="16" fill="#2260E8"/>
-            <rect x="24" y="34" width="212" height="16" fill="#2260E8"/>
-            <text x="64" y="36" font-size="9" fill="white" font-family="sans-serif" font-weight="700">서울 여행 Day 1</text>
-            <text x="64" y="46" font-size="7" fill="rgba(255,255,255,0.7)" font-family="sans-serif">2025.10.16 · 3개 장소 · 12장</text>
-            <!-- calendar icon -->
-            <rect x="34" y="20" width="22" height="22" rx="5" fill="rgba(255,255,255,0.2)"/>
-            <text x="45" y="35" text-anchor="middle" font-size="12" font-family="sans-serif">🗓</text>
-            <!-- AI badge -->
-            <rect x="198" y="22" width="28" height="14" rx="7" fill="rgba(255,255,255,0.25)"/>
-            <text x="212" y="32" text-anchor="middle" font-size="7.5" fill="white" font-family="sans-serif" font-weight="800">AI ✓</text>
-
-            <!-- mini map strip -->
-            <rect x="32" y="56" width="100" height="56" rx="8" fill="#EDF4FD"/>
-            <path d="M42 98 Q52 82 62 76 Q72 70 80 62 Q90 56 102 54 Q112 52 122 52" stroke="#2260E8" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <circle cx="42"  cy="98" r="4" fill="#2260E8"/>
-            <circle cx="80"  cy="62" r="4" fill="#F5A623"/>
-            <circle cx="122" cy="52" r="4" fill="#34C97A"/>
-
-            <!-- place timeline -->
+        <div class="how-step-ill" style="overflow:hidden;">
+          <svg viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 일지 카드 배경 -->
+            <rect x="14" y="14" width="232" height="192" rx="18" fill="white" stroke="#E0EAFF" stroke-width="1.5"/>
+            <!-- 헤더 바 -->
+            <rect x="14" y="14" width="232" height="46" rx="18" fill="#2260E8"/>
+            <rect x="14" y="40"  width="232" height="20" fill="#2260E8"/>
+            <!-- 달력 아이콘 -->
+            <rect x="26" y="22" width="26" height="26" rx="7" fill="rgba(255,255,255,0.18)"/>
+            <rect x="31" y="20" width="4"  height="6"  rx="2" fill="rgba(255,255,255,0.6)"/>
+            <rect x="47" y="20" width="4"  height="6"  rx="2" fill="rgba(255,255,255,0.6)"/>
+            <rect x="28" y="30" width="22" height="2"  rx="1" fill="rgba(255,255,255,0.4)"/>
+            <rect x="28" y="34" width="14" height="2"  rx="1" fill="rgba(255,255,255,0.3)"/>
+            <!-- 제목 -->
+            <text x="62" y="34" font-size="10" fill="white" font-family="sans-serif" font-weight="800">서울 여행 Day 1</text>
+            <text x="62" y="48" font-size="7.5" fill="rgba(255,255,255,0.65)" font-family="sans-serif">2025.10.16 · 3개 장소 · 12장</text>
+            <!-- AI 배지 -->
+            <rect x="200" y="24" width="36" height="16" rx="8" fill="rgba(255,255,255,0.22)"/>
+            <text x="218" y="35" text-anchor="middle" font-size="8" fill="white" font-family="sans-serif" font-weight="800">AI ✓</text>
+            <!-- 미니 지도 -->
+            <rect x="22" y="68" width="106" height="66" rx="10" fill="#EDF4FD"/>
+            <path d="M32 120 Q44 104 56 96 Q68 88 78 78 Q90 68 102 64 Q112 62 122 62"
+              stroke="#2260E8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="32"  cy="120" r="4.5" fill="#2260E8"/>
+            <circle cx="78"  cy="78"  r="4.5" fill="#F5A623"/>
+            <circle cx="122" cy="62"  r="4.5" fill="#34C97A"/>
+            <!-- 타임라인 -->
+            <!-- 세로 연결선 -->
+            <line x1="38" y1="148" x2="38" y2="196" stroke="#E0EAFF" stroke-width="1.5"/>
             <!-- Place 1 -->
-            <circle cx="46" cy="126" r="5" fill="#2260E8"/>
-            <rect x="54" y="120" width="164" height="14" rx="4" fill="#F4F9FF"/>
-            <text x="60" y="130" font-size="7.5" fill="#0D1F3C" font-family="sans-serif" font-weight="700">📍 경복궁</text>
-            <text x="172" y="130" font-size="7" fill="#8AAAC8" font-family="sans-serif">09:30</text>
-            <!-- photo thumbs for place 1 -->
-            <rect x="54" y="136" width="16" height="12" rx="2.5" fill="#B8D8F8"/>
-            <rect x="72" y="136" width="16" height="12" rx="2.5" fill="#A8C8E8"/>
-            <rect x="90" y="136" width="16" height="12" rx="2.5" fill="#98B8D8"/>
-            <rect x="108" y="136" width="22" height="12" rx="2.5" fill="#EEF5FF" stroke="#D0E0F5" stroke-width="0.8"/>
-            <text x="119" y="144" text-anchor="middle" font-size="7" fill="#5A80B8" font-family="sans-serif">+4</text>
-
+            <circle cx="38" cy="148" r="6" fill="#2260E8"/>
+            <circle cx="38" cy="148" r="3" fill="white"/>
+            <rect x="50" y="140" width="182" height="18" rx="5" fill="#F4F9FF"/>
+            <text x="58" y="152" font-size="8.5" fill="#0D1F3C" font-family="sans-serif" font-weight="700">경복궁</text>
+            <text x="192" y="152" font-size="7.5" fill="#8AAAC8" font-family="sans-serif">09:30</text>
+            <!-- 사진 썸네일 3개 -->
+            <rect x="50" y="160" width="20" height="15" rx="3" fill="#B8D8F8"/>
+            <rect x="73" y="160" width="20" height="15" rx="3" fill="#A8C8E8"/>
+            <rect x="96" y="160" width="20" height="15" rx="3" fill="#98B8D8"/>
+            <rect x="119" y="160" width="24" height="15" rx="3" fill="#EEF5FF" stroke="#D0E0F5" stroke-width="0.8"/>
+            <text x="131" y="170" text-anchor="middle" font-size="7.5" fill="#5A80B8" font-family="sans-serif">+4</text>
             <!-- Place 2 -->
-            <circle cx="46" cy="160" r="5" fill="#F5A623"/>
-            <rect x="54" y="154" width="164" height="14" rx="4" fill="#FFF8EE"/>
-            <text x="60" y="164" font-size="7.5" fill="#0D1F3C" font-family="sans-serif" font-weight="700">📍 북촌 한옥마을</text>
-            <text x="172" y="164" font-size="7" fill="#8AAAC8" font-family="sans-serif">11:40</text>
-
-            <!-- AI text lines (simulated) -->
-            <rect x="54" y="170" width="96" height="5" rx="2.5" fill="#EEF5FF"/>
-            <rect x="54" y="177" width="72" height="5" rx="2.5" fill="#EEF5FF"/>
-
-            <!-- share button -->
-            <rect x="140" y="170" width="48" height="16" rx="8" fill="#2260E8"/>
-            <text x="164" y="180" text-anchor="middle" font-size="7.5" fill="white" font-family="sans-serif" font-weight="700">공유하기 →</text>
+            <circle cx="38" cy="196" r="6" fill="#F5A623"/>
+            <circle cx="38" cy="196" r="3" fill="white"/>
+            <rect x="50" y="188" width="182" height="18" rx="5" fill="#FFF8EE"/>
+            <text x="58" y="200" font-size="8.5" fill="#0D1F3C" font-family="sans-serif" font-weight="700">북촌 한옥마을</text>
+            <text x="192" y="200" font-size="7.5" fill="#8AAAC8" font-family="sans-serif">11:40</text>
           </svg>
         </div>
         <div class="how-step-num">03</div>
@@ -1392,24 +1420,16 @@
       </div>
       <div class="metrics-grid">
         <div class="metric-card reveal">
-          <div class="metric-num">5,000</div>
+          <div class="metric-icon" style="background:rgba(34,96,232,0.08);">📲</div>
+          <div class="metric-subtitle" style="color:#0D1F3C;">다운로드 횟수</div>
+          <div class="metric-num" data-target="5000" data-suffix="회">5,000회</div>
           <div class="metric-label">출시 3개월 내<br>누적 다운로드 목표</div>
-          <span class="metric-tag">사용자 확보</span>
         </div>
         <div class="metric-card reveal">
-          <div class="metric-num">70%</div>
-          <div class="metric-label">기존 수기 기록 대비<br>정리 시간 단축 목표</div>
-          <span class="metric-tag">사용 편의성</span>
-        </div>
-        <div class="metric-card reveal">
-          <div class="metric-num">80%</div>
-          <div class="metric-label">GPS 기반 경로<br>자동 생성 성공률</div>
-          <span class="metric-tag">기능 완성도</span>
-        </div>
-        <div class="metric-card reveal">
-          <div class="metric-num">5%</div>
-          <div class="metric-label">무료→프리미엄<br>구독 전환율 목표</div>
-          <span class="metric-tag">수익성</span>
+          <div class="metric-icon" style="background:rgba(34,96,232,0.08);">⏱️</div>
+          <div class="metric-subtitle" style="color:#0D1F3C;">평균 여행 기록 시간</div>
+          <div class="metric-num" data-target="75" data-suffix="% 감소">75% 감소</div>
+          <div class="metric-label">1시간 걸리던 기록을<br>15분으로 단축</div>
         </div>
       </div>
     </div>
@@ -1418,30 +1438,173 @@
   <!-- ══ CTA ══ -->
   <section id="cta">
     <div class="cta-inner reveal">
-      <div class="cta-label">✈️ 출시 예정</div>
-      <h2 class="cta-title">여행은 당신이,<br>기록은 <span class="hl">TRIPON</span>이</h2>
-      <p class="cta-desc">사진 한 장이면 충분합니다. AI가 경로·사진·일지를<br>자동으로 완성해 평생 기억할 여행 기록을 만들어드립니다.</p>
+
+      <!-- 경로가 글씨를 감싸는 레이아웃 -->
+      <div style="position:relative;max-width:640px;margin:0 auto 40px;">
+
+        <!-- SVG 경로 — JS로 무한 반복, 비행기가 경로 그리며 날아감 -->
+        <svg id="ctaSvg" viewBox="0 0 640 220" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style="position:absolute;top:0;left:0;width:100%;height:auto;pointer-events:none;z-index:10;">
+
+          <!-- 배경 가이드선 (항상 표시) -->
+          <defs>
+            <filter id="planeShadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#2260E8" flood-opacity="0.25"/>
+            </filter>
+          </defs>
+          <path id="ctaBg" d="M 10 210 C 30 180, 50 198, 80 165 C 108 134, 130 104, 162 76 C 188 52, 196 70, 220 40 C 244 12, 268 0, 308 0 C 348 0, 374 8, 406 20 C 436 32, 444 54, 474 48 C 504 42, 524 62, 548 84 C 572 106, 580 130, 598 144 C 612 154, 624 160, 630 162"
+            stroke="rgba(34,96,232,0.1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <!-- 그려지는 trail (JS 제어) -->
+          <path id="ctaTrail" d="M 10 210 C 30 180, 50 198, 80 165 C 108 134, 130 104, 162 76 C 188 52, 196 70, 220 40 C 244 12, 268 0, 308 0 C 348 0, 374 8, 406 20 C 436 32, 444 54, 474 48 C 504 42, 524 62, 548 84 C 572 106, 580 130, 598 144 C 612 154, 624 160, 630 162"
+            stroke="#2260E8" stroke-width="2.2" fill="none" stroke-linecap="round"
+            stroke-dasharray="1500" stroke-dashoffset="1500"/>
+          <!-- 글로우 -->
+          <path id="ctaGlow" d="M 10 210 C 30 180, 50 198, 80 165 C 108 134, 130 104, 162 76 C 188 52, 196 70, 220 40 C 244 12, 268 0, 308 0 C 348 0, 374 8, 406 20 C 436 32, 444 54, 474 48 C 504 42, 524 62, 548 84 C 572 106, 580 130, 598 144 C 612 154, 624 160, 630 162"
+            stroke="#2260E8" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.08"
+            stroke-dasharray="1500" stroke-dashoffset="1500"/>
+
+          <!-- 출발 핀 (항상 표시) -->
+          <circle cx="10" cy="210" r="6" fill="#2260E8"/>
+          <circle cx="10" cy="210" r="3" fill="white"/>
+
+          <!-- 경유 핀 (페이드인) -->
+          <circle id="pin1" cx="308" cy="0" r="5" fill="#4A82FF" opacity="0"/>
+          <circle id="pin1i" cx="308" cy="0" r="2.5" fill="white" opacity="0"/>
+          <circle id="pin2" cx="474" cy="52" r="5" fill="#4A82FF" opacity="0"/>
+          <circle id="pin2i" cx="474" cy="52" r="2.5" fill="white" opacity="0"/>
+
+          <!-- 도착 핀 -->
+          <circle id="pinEnd" cx="630" cy="162" r="8" fill="#E8940A" opacity="0"/>
+          <circle id="pinEndi" cx="630" cy="162" r="4" fill="white" opacity="0"/>
+          <circle id="pinPulse" cx="630" cy="162" r="16" fill="#E8940A" opacity="0"/>
+
+          <!-- 비행기 (JS 위치 제어) -->
+          <g id="ctaPlane" opacity="0">
+            <circle r="18" fill="white" opacity="0.95" stroke="#2260E8" stroke-width="2"/>
+            <text x="0" y="2" text-anchor="middle" dominant-baseline="middle" font-size="18" font-family="sans-serif">✈</text>
+          </g>
+
+          <!-- 라벨 -->
+          <g opacity="0" id="labelStart">
+            <rect x="0" y="218" width="44" height="13" rx="6.5" fill="white" stroke="rgba(34,96,232,0.2)" stroke-width="1"/>
+            <text x="22" y="228.5" text-anchor="middle" font-size="7" fill="#2260E8" font-family="sans-serif" font-weight="700">출발</text>
+          </g>
+          <g opacity="0" id="labelEnd">
+            <rect x="596" y="146" width="44" height="13" rx="6.5" fill="#E8940A"/>
+            <text x="618" y="155.5" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif" font-weight="700">도착 🎉</text>
+          </g>
+        </svg>
+
+        <script>
+        (function() {
+          // 경로 포인트 샘플링
+          const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+          path.setAttribute('d', 'M 10 210 C 30 180, 50 198, 80 165 C 108 134, 130 104, 162 76 C 188 52, 196 70, 220 40 C 244 12, 268 0, 308 0 C 348 0, 374 8, 406 20 C 436 32, 444 54, 474 48 C 504 42, 524 62, 548 84 C 572 106, 580 130, 598 144 C 612 154, 624 160, 630 162');
+          const totalLen = path.getTotalLength();
+          const DURATION = 3200; // ms
+          const PAUSE = 600;     // ms after arrival
+
+          function runLoop() {
+            const trail = document.getElementById('ctaTrail');
+            const glow  = document.getElementById('ctaGlow');
+            const plane = document.getElementById('ctaPlane');
+            const pin1  = document.getElementById('pin1');
+            const pin1i = document.getElementById('pin1i');
+            const pin2  = document.getElementById('pin2');
+            const pin2i = document.getElementById('pin2i');
+            const pinEnd  = document.getElementById('pinEnd');
+            const pinEndi = document.getElementById('pinEndi');
+            const pinPulse= document.getElementById('pinPulse');
+            const lblEnd  = document.getElementById('labelEnd');
+            const lblStart= document.getElementById('labelStart');
+
+            // reset
+            trail.style.strokeDashoffset = totalLen;
+            glow.style.strokeDashoffset  = totalLen;
+            trail.style.strokeDasharray  = totalLen;
+            glow.style.strokeDasharray   = totalLen;
+            [pin1,pin1i,pin2,pin2i,pinEnd,pinEndi,pinPulse,lblEnd,lblStart].forEach(el=>el.setAttribute('opacity','0'));
+            plane.setAttribute('opacity','0');
+            lblStart.setAttribute('opacity','1');
+
+            let start = null;
+            function tick(ts) {
+              if (!start) start = ts;
+              const elapsed = ts - start;
+              const t = Math.min(elapsed / DURATION, 1);
+              // ease in-out
+              const e = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+              const dist = e * totalLen;
+
+              // trail
+              plane.setAttribute('opacity','1');
+              trail.style.strokeDashoffset = totalLen - dist;
+              glow.style.strokeDashoffset  = totalLen - dist;
+
+              // plane position
+              const pt = path.getPointAtLength(dist);
+              const pt2 = path.getPointAtLength(Math.min(dist+2, totalLen));
+              const angle = Math.atan2(pt2.y - pt.y, pt2.x - pt.x) * 180 / Math.PI;
+              plane.setAttribute('transform', `translate(${pt.x},${pt.y}) rotate(${angle})`);
+
+              // 경유 핀 타이밍
+              if (t > 0.42) { pin1.setAttribute('opacity','1'); pin1i.setAttribute('opacity','1'); }
+              if (t > 0.64) { pin2.setAttribute('opacity','1'); pin2i.setAttribute('opacity','1'); }
+
+              if (t < 1) {
+                requestAnimationFrame(tick);
+              } else {
+                // 도착
+                pinEnd.setAttribute('opacity','1');
+                pinEndi.setAttribute('opacity','1');
+                lblEnd.setAttribute('opacity','1');
+                // 펄스
+                let p=0, pDir=1;
+                const pulse = setInterval(()=>{
+                  p += pDir*0.04;
+                  if(p>0.15) pDir=-1; if(p<0) pDir=1;
+                  pinPulse.setAttribute('opacity', p);
+                }, 30);
+                setTimeout(()=>{ clearInterval(pulse); pinPulse.setAttribute('opacity','0'); runLoop(); }, PAUSE + 800);
+              }
+            }
+            requestAnimationFrame(tick);
+          }
+          // 섹션이 보일 때 시작
+          const obs = new IntersectionObserver(entries=>{
+            if(entries[0].isIntersecting) { obs.disconnect(); runLoop(); }
+          }, {threshold:0.3});
+          obs.observe(document.getElementById('cta'));
+        })();
+        </script>
+
+        <!-- 글씨 -->
+        <div style="position:relative;z-index:0;padding:80px 20px 24px;">
+          <h2 class="cta-title" style="margin-bottom:14px;">여행은 당신이,<br>기록은 <span class="hl">TRIPON</span>이</h2>
+          <p class="cta-desc" style="margin-bottom:0;">GPS 기반으로 경로·사진·일지를 자동 기록해,<br>여행이 끝나면 하나의 기록으로 완성됩니다.</p>
+        </div>
+      </div>
 
       <!-- 지표 -->
       <div class="cta-stats">
         <div class="cta-stat">
-          <div class="cta-stat-num">5,000+</div>
-          <div class="cta-stat-label">출시 3개월<br>목표 다운로드</div>
+          <div class="cta-stat-label">직접 기록에<br>쓰는 시간</div>
+          <div class="cta-stat-num">0초</div>
         </div>
         <div class="cta-stat">
-          <div class="cta-stat-num">70%</div>
-          <div class="cta-stat-label">기록 시간<br>단축 목표</div>
+          <div class="cta-stat-label">경로 · 사진 · 일지<br>전부 AI가</div>
+          <div class="cta-stat-num">자동</div>
         </div>
         <div class="cta-stat">
-          <div class="cta-stat-num">80%</div>
-          <div class="cta-stat-label">경로 자동 생성<br>성공률 목표</div>
+          <div class="cta-stat-label">꺼내볼 수 있는<br>나만의 기록</div>
+          <div class="cta-stat-num">평생</div>
         </div>
       </div>
 
       <!-- 버튼 -->
       <div class="cta-buttons">
         <button class="btn-cta" onclick="window.open('https://forms.gle/FcSPwBpX26vCAH3B6','_blank')">출시 알림 신청하기 →</button>
-        <button class="btn-cta-ghost" onclick="document.getElementById('feature-1').scrollIntoView({behavior:'smooth'})">기능 둘러보기</button>
       </div>
     </div>
   </section>
@@ -1532,6 +1695,97 @@
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+
+
+    /* ── Counter animation ── */
+    (function() {
+      const counters = document.querySelectorAll('.metric-num[data-target]');
+      const countObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1600;
+          const start = performance.now();
+          const isLarge = target >= 1000;
+          function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+          function fmt(val) {
+            const num = isLarge ? val.toLocaleString() : val;
+            return num + suffix;
+          }
+          function tick(now) {
+            const elapsed = Math.min(now - start, duration);
+            const progress = ease(elapsed / duration);
+            const val = Math.round(progress * target);
+            el.textContent = fmt(val);
+            if (elapsed < duration) requestAnimationFrame(tick);
+            else el.textContent = fmt(target);
+          }
+          requestAnimationFrame(tick);
+          countObs.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(el => countObs.observe(el));
+    })();
+
+
+    /* ── Hero big clouds ── */
+    (function() {
+      const layer = document.getElementById('heroClouds');
+      if (!layer) return;
+      const W = window.innerWidth;
+
+      // 구름 위쪽에만 (top 0~28%)
+      const clouds = [
+        { top: 4,  w: 520, h: 145, spd: 155, delay: 0,   op: 0.58, blur: 22 },
+        { top: 14, w: 380, h: 115, spd: 125, delay: 55,  op: 0.48, blur: 17 },
+        { top: 22, w: 280, h: 90,  spd: 105, delay: 105, op: 0.44, blur: 14 },
+        { top: 8,  w: 200, h: 72,  spd: 90,  delay: 75,  op: 0.40, blur: 12 },
+      ];
+
+      clouds.forEach(cfg => {
+        // 구름은 여러 원을 겹쳐 만든 SVG
+        const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+        const w = cfg.w, h = cfg.h;
+        svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        svg.setAttribute('width', w);
+        svg.setAttribute('height', h);
+        svg.style.cssText = `position:absolute;top:${cfg.top}%;filter:blur(${cfg.blur}px);opacity:${cfg.op};`;
+
+        // 구름 모양: 겹친 원들
+        const fills = [
+          { cx: w*0.5, cy: h*0.65, r: h*0.38 },
+          { cx: w*0.3, cy: h*0.72, r: h*0.30 },
+          { cx: w*0.7, cy: h*0.72, r: h*0.28 },
+          { cx: w*0.18,cy: h*0.80, r: h*0.22 },
+          { cx: w*0.82,cy: h*0.78, r: h*0.20 },
+          { cx: w*0.42,cy: h*0.45, r: h*0.26 },
+          { cx: w*0.62,cy: h*0.48, r: h*0.24 },
+        ];
+        fills.forEach(f => {
+          const circle = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+          circle.setAttribute('cx', f.cx);
+          circle.setAttribute('cy', f.cy);
+          circle.setAttribute('rx', f.r * 1.2);
+          circle.setAttribute('ry', f.r);
+          circle.setAttribute('fill', 'white');
+          svg.appendChild(circle);
+        });
+
+        const startX = -(w + 100);
+        const endX = W + 100;
+        svg.style.setProperty('--hc-from', startX + 'px');
+        svg.style.setProperty('--hc-to', endX + 'px');
+        svg.style.animationName = 'hcDrift';
+        svg.style.animationDuration = cfg.spd + 's';
+        svg.style.animationDelay = -cfg.delay + 's';
+        svg.style.animationTimingFunction = 'linear';
+        svg.style.animationIterationCount = 'infinite';
+        layer.appendChild(svg);
+      });
+    })();
 
     /* ── Stagger cards ── */
     document.querySelectorAll('.metric-card').forEach((el, i) => {
